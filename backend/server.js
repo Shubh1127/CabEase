@@ -1,6 +1,6 @@
+require('dotenv').config();
 const http=require('http')
 const app=require('./app');
-require('dotenv').config();
 const cors=require('cors')
 
 const port=process.env.PORT;
