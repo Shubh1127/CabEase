@@ -11,7 +11,7 @@ app.use(cookieParser())
 
 ConnectToDb()
 app.get('/',(req,res)=>{
-    res.send("hello world");
+    res.send("hello WORLD");
 })
 
 app.use('/users',userRoutes)
