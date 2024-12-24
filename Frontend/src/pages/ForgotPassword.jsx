@@ -37,6 +37,10 @@ const  ForgotPassword =  () => {
                 <input className='bg-white border border-black rounded-md py-2 px-4 w-full' type="email" required placeholder="enter your email" name='email'  value={Data.email} onChange={handleChange}></input>
             <h3 className=' font-bold mt-1'>Enter your personal Private key</h3>
             <input className='bg-white border border-black rounded-md py-2 px-4 w-full' type="text" required placeholder="Private key" name='privateKey' value={Data.privateKey} onChange={handleChange}></input>
+            <h3 className=' font-bold mt-1'>Enter your new password</h3>
+            <input className='bg-white border border-black rounded-md py-2 px-4 w-full' type="password" required placeholder="Password" name='password' value={Data.password} onChange={handleChange}></input>
+            <h3 className=' font-bold mt-1'>Confirm your new password</h3>
+            <input className='bg-white border border-black rounded-md py-2 px-4 w-full' type="password" required placeholder="Password" name='confirmpassword' value={Data.confirmpassword} onChange={handleChange}></input>
             <button className='bg-black text-white w-full  mt-3 py-2 px-4 rounded-md' type="submit">Submit</button>
         </form>
         </div>
