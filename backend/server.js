@@ -5,7 +5,7 @@ const cors=require('cors')
 
 const port=process.env.PORT;
 const server=http.createServer(app)
-app.use(cors({origin:"*"}));
+app.use(cors({origin:"http://localhost:5173"}));
 
 server.listen(port,()=>{
     console.log(`Server has started at port: ${port}`);

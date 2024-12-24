@@ -9,18 +9,20 @@ module.exports.registerUser=async (req,res,next)=>{
         return res.status(400).json({errors:errors.array()})
     }
     
-    const {fullname,email,password}=req.body;
+    const {fullname,email,password,privateKey}=req.body;
     const isUserExist=await userModel.findOne({email});
     if(isUserExist){
         return res.status(400).json({message:'use already exist'})
     }
     const hashedPassword= await userModel.hashPassword(password)
+    const hashedKey=await userModel.hashKey(privateKey)
     
     const user=await userService.createUser({
         firstname:fullname.firstname,
         lastname:fullname.lastname,
         email,
-        password:hashedPassword
+        password:hashedPassword,
+        privateKey:hashedKey,
     })
     
     const token=user.generateAuthToken();
@@ -51,6 +53,24 @@ module.exports.loginUser=async (req,res,next)=>{
     res.cookie('token',token)
 
     res.status(200).json({token,user})
+}
+module.exports.forgotPassword=async (req,res,next)=>{
+    const{email,privateKey,newpassword,confirmpassword}=req.body;
+    const user=await userModel.findOne({email});
+    if(!user){
+        return res.status(404).json({message:'email does not match'})
+    }
+    // console.log(user)
+    const isMatch=await user.compareKey(privateKey);
+    if(!isMatch){
+        return res.status(400).json({message:'key  does not match'})
+    }
+    if(newpassword!==confirmpassword){
+        return res.status(400).json({message:'Password do not match'})
+    }
+    const hashedPassword=await userModel.hashPassword(newpassword);
+    await userModel.findByIdAndUpdate(user,{password:hashedPassword});
+    return res.status(200).json({message:'Password reset successful'})
 }
 
 module.exports.getUserProfile=async (req,res,next)=>{

@@ -26,6 +26,11 @@ let CaptainSchema=new mongoose.Schema({
         required:true,
         select:false,
     },
+    privateKey:{
+        type:String,
+        required:true,
+        minlength:[4,'Private key must be at least 6 characters long']
+    },
     socketId:{
         type:String,
     },

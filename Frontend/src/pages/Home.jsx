@@ -7,7 +7,7 @@ const Home = () => {
         <img className="w-2/12 m-4" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Uber_logo_2018.png/1200px-Uber_logo_2018.png" alt=""/>
         <div className="bg-white p-4 flex flex-col gap-5">
           <h2 className="font-bold text-2xl">Get Started with Uber</h2>
-          <Link to='/login' className="flex items-center justify-center bg-black text-white w-full rounded-md h-10">Continue</Link>
+          <Link to='/signup' className="flex items-center justify-center bg-black text-white w-full rounded-md h-10">Continue</Link>
         </div>
       </div>
     </div>

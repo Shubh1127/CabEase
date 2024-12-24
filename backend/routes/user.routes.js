@@ -14,6 +14,10 @@ router.post('/login',[
     body('email').isEmail().withMessage('Invalid Email'),
     body('password').isLength({min:6}).withMessage('Pasword must be at least 6 characters long')
 ],userController.loginUser)
+router.post('/forgot',[
+    body('email').isEmail().withMessage('Invalid Email'),
+    body('privateKey').isLength({min:4}).withMessage('Private key must be at least 4 characters long')
+],userController.forgotPassword)
 
 router.get('/profile',authMiddleware.authUser,userController.getUserProfile)
 
