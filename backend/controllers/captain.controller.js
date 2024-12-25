@@ -64,7 +64,7 @@ module.exports.forgotPassword=async(req,res,next)=>{
     if(!captain){
         return res.status(404).json({message:'email does not match'})
     }
-    const isMatch=await CaptainModel.compareKey(privateKey);
+    const isMatch=await captain.comparePrivateKey(privateKey)
     if(!isMatch){
         return res.status(401).json({message:'Private key incorrect'})
     }
