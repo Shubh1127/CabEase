@@ -69,7 +69,7 @@ module.exports.forgotPassword=async (req,res,next)=>{
         return res.status(400).json({message:'Password do not match'})
     }
     const hashedPassword=await userModel.hashPassword(newpassword);
-    await userModel.findByIdAndUpdate(user,{password:hashedPassword});
+    await userModel.findByIdAndUpdate(user._id,{password:hashedPassword});
     return res.status(200).json({message:'Password reset successful'})
 }
 
