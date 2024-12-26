@@ -1,7 +1,8 @@
 import { auth } from "../../firebaseConfig";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword,signInWithPopup,GoogleAuthProvider, sendEmailVerification } from "firebase/auth";
 function SignupUser(){
+    const [isVerified, setIsVerified] = useState(false);
     const GoogleProvider=new GoogleAuthProvider();
     const handleGoogleSignUp=async ()=>{
         try{
@@ -30,6 +31,19 @@ function SignupUser(){
                 console.log(e);
         })
     }
+    useEffect(() => {
+        const checkEmailVerification = async () => {
+          if (auth.currentUser) {
+            await auth.currentUser.reload(); // Refresh user data
+            setIsVerified(auth.currentUser.emailVerified);
+            
+          }
+        };
+    
+        const interval = setInterval(checkEmailVerification, 5000); // Check every 5 seconds
+    
+        return () => clearInterval(interval); // Clean up interval on unmount
+      }, []);
     const [Data,setData] = useState({
         email:"",
         password:"",
