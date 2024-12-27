@@ -1,5 +1,6 @@
-import { auth } from "../../firebaseConfig";
+import { auth } from "../../../firebaseConfig";
 import { useState } from "react";
+import '../../App.css'
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 function UserLogin() {
@@ -8,7 +9,6 @@ function UserLogin() {
     email: "",
     password: "",
   });
-
   const [error, setError] = useState("");
   const [isVerified, setIsVerified] = useState(false);
 
@@ -22,7 +22,7 @@ function UserLogin() {
         Data.password
       );
       const user = userCredential.user;
-      await user.reload(); // Refresh user data to get updated emailVerified status
+      await user.reload(); 
       if (user.emailVerified) {
         setIsVerified(true);
         console.log("Login successful:", user);
