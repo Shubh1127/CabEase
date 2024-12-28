@@ -1,7 +1,7 @@
 
 
-import '../../App.css'
-import {  useAuth } from './User.UseContext';
+// import '../../App.css'
+import {  useAuth } from '../UseContext';
 function UserLogin() {
   const {
     data,
@@ -10,10 +10,9 @@ function UserLogin() {
     handleGoogleSignUp,
     handleLogin,
     handleGithubSignUp,
-    handleResetPassword
+    handleResetPassword,
   }=useAuth();
-  
-  
+
 
   return (
     <div className="p-5 w-full h-screen">
@@ -40,7 +39,7 @@ function UserLogin() {
           value={data.password}
           onChange={handleChange}
         />
-        <p className='text-black'>{error}</p>
+            <p className="text-red-500">{error}</p>
         <button
           type="submit"
           className="w-full bg-black text-white p-2 mt-2 rounded font-semibold"
@@ -48,29 +47,29 @@ function UserLogin() {
           Login
         </button>
         </form>
-        <button className='text-blue-500 bg-black p-1 mt-2 rounded text-center w-80 m-5' onClick={handleResetPassword}>Forgot Password?</button>
+        <button className='text-blue-500 p-1  ms-16  rounded text-center w-[60vw] ' onClick={handleResetPassword}>Forgot Password?</button>
         <div className='flex flex-col items-center justify-between  p-4'>
         <p>OR</p>
         <button
           type="submit"
-          className="w-full bg-black text-white p-2 mt-2 rounded font-semibold" 
+          className="w-full text-blue-500 p-2 mt-2 rounded font-semibold" 
           onClick={handleGoogleSignUp}
           >
           Don&apos;t Have an Account? Signup
         </button>
         <button
           type="submit"
-          className="w-full bg-black text-white p-2 mt-2 rounded font-semibold" 
+          className="w-full  border border-black text-black p-2 mt-2 rounded font-semibold" 
           onClick={handleGoogleSignUp}
           >
-          Sign in with Google
+          <i className="fa-brands fa-google mr-1"></i> Google
         </button>
         <button
           type="submit"
-          className="w-full bg-black text-white p-2 mt-2 rounded font-semibold" 
+          className="w-full  border border-black text-black p-2 mt-2 rounded font-semibold" 
           onClick={handleGithubSignUp}
           >
-          Sign in with Github
+          <i className="fa-brands fa-github mr-1 w-4"></i> Github
         </button>
             </div>
     </div>

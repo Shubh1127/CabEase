@@ -1,6 +1,7 @@
 // filepath: /path/to/frontend/firebaseConfig.js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA0a9dVvmagYq_mrcqBlIzmJPlFstAMVKQ",
@@ -14,5 +15,5 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-export { auth };
+const db=getFirestore(app);
+export { auth,db };

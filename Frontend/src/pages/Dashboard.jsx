@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useAuth } from "./UserComponent/User.UseContext"
+import { useAuth } from "./UseContext"
 const Dashboard = () => {
     const {user,handleLogout}=useAuth();
   return (

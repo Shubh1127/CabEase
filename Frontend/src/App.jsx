@@ -5,8 +5,8 @@ import Home from './pages/Home'
 import UserLogin from './pages/UserComponent/UserLogin'  
 import Dashboard from './pages/Dashboard'
 import SignupUser from './pages/UserComponent/SignupUser'
-import CaptainSignup from './pages/CaptainComponent.jsx/CaptainSignup'
-import CaptainLogin from './pages/CaptainComponent.jsx/CaptainLogin'
+import SignupCaptain from './pages/CaptainComponent/SignupCaptain'
+import LoginCaptain from './pages/CaptainComponent/LoginCaptain'
 
 function App() {
   return (
@@ -15,8 +15,8 @@ function App() {
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='/login' element={<UserLogin/>}/>
       <Route path='/signup' element={<SignupUser/>}/>
-      <Route path='/captainlogin' element={<CaptainLogin/>}/>
-      <Route path='/captainsignup' element={<CaptainSignup/>}/>
+      <Route path='/captain-login' element={<LoginCaptain/>}/>
+      <Route path='/captain-signup' element={<SignupCaptain/>}/>
       <Route path='*'  element={<h1 className='text-center text-[100px]'>404 Not Found</h1>}/>
     </Routes>
   
