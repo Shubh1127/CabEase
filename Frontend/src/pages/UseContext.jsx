@@ -1,12 +1,9 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { auth, db } from '../../firebaseConfig';
-import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut, sendPasswordResetEmail, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut, sendPasswordResetEmail} from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import PropTypes from 'prop-types';
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
-
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -18,9 +15,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
   const [isVerified, setIsVerified] = useState(false);
+  const [message,setMessage]=useState('')
   const [data, setData] = useState({ firstname: '', lastname: '', email: '', password: '', phoneNumber: null });
   const [captainData, setCaptainData] = useState({ firstname: '', lastname: '', email: '', password: '', phoneNumber: '' });
-  const [verificationCode, setVerificationCode] = useState('');
   const [captain, setCaptain] = useState(null);
   const [isCodeSent, setIsCodeSent] = useState(false);
 
@@ -46,7 +43,44 @@ export const AuthProvider = ({ children }) => {
       setError(e.message);
     }
   };
+  const handleCaptainGoogleSignup=async()=>{
+    try{
+      const result=await signInWithPopup(auth,GoogleProvider);
+      const captain=result.user;
+      if(captain){
+        await setDoc(doc(db,'captains',captain.uid),{
+          firstname:captainData.firstname,
+          lastname:captainData.lastname,
+          email:captain.email,
+          phoneNumber:captainData.phoneNumber
+        })
+        navigate('/dashboard')
+        setCaptain(captain);
+      }
+    }catch(e){
+      setError(e.message)
+    }
+  }
 
+  const handleCaptainGithubSignUp = async () => {
+    try {
+      const result = await signInWithPopup(auth, GithubProvider);
+      const captain = result.user;
+      if (captain) {
+        await setDoc(doc(db, 'captains', captain.uid), {
+          firstname: captainData.firstname,
+          lastname: captainData.lastname,
+          email: captain.email,
+          phoneNumber: captainData.phoneNumber,
+        });
+        navigate('/dashboard');
+        setCaptain(captain);
+      }
+    } catch (e) {
+      console.log(e);
+      setError(e.message);
+    }
+  };
   const handleGithubSignUp = async () => {
     try {
       const result = await signInWithPopup(auth, GithubProvider);
@@ -75,7 +109,7 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  const handleCatainChange=(e)=>{
+  const handleCaptainChange=(e)=>{
     const {name,value}=e.target;
     setCaptainData({
       ...captainData,
@@ -83,6 +117,25 @@ export const AuthProvider = ({ children }) => {
     })
   }
 
+  const handleCaptainLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const CaptainCredential = await signInWithEmailAndPassword(auth, captainData.email, captainData.password);
+      const captain = CaptainCredential.user;
+      await captain.reload();
+      if (captain.emailVerified) {
+        setIsVerified(true);
+        console.log("Login successful:", captain);
+        navigate('/dashboard');
+      } else {
+        setIsVerified(false);
+        setError("Please verify your email before logging in.");
+        await signOut(auth);
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -103,25 +156,73 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const handleSignup = async (e) => {
+  const handleCaptainSignup = async (e) => {
+    e.preventDefault();
+    try {
+      const CaptainCredential = await createUserWithEmailAndPassword(auth, captainData.email, captainData.password);
+      const captain = CaptainCredential.user;
+      await sendEmailVerification(captain);
+      await setDoc(doc(db, 'captains', captain.uid), {
+        firstname: captainData.firstname,
+        lastname: captainData.lastname,
+        email: captainData.email,
+        phoneNumber: captainData.phoneNumber,
+      });
+      setUser(captain);
+      navigate('/dashboard');
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       const user = userCredential.user;
+
+      // Send initial verification email
       await sendEmailVerification(user);
+
+      // Save user data in Firestore
       await setDoc(doc(db, 'users', user.uid), {
         firstname: data.firstname,
         lastname: data.lastname,
         email: user.email,
         phoneNumber: data.phoneNumber,
       });
-      setUser(user);
-      navigate('/dashboard');
+
+      setMessage('Verification email is sent. Verify your email first.');
+      startVerificationCheck(user);
     } catch (e) {
       setError(e.message);
     }
   };
 
+  const startVerificationCheck = (user) => {
+    const intervalId = setInterval(async () => {
+      await user.reload(); // Reload user to fetch updated verification status
+      if (user.emailVerified) {
+        setIsVerified(true);
+        clearInterval(intervalId); // Stop checking once verified
+        navigate('/dashboard'); // Navigate to dashboard
+      } else {
+        setMessage('Verify your email first.');
+        // Resend verification email if expired (check every 60 seconds for example)
+        await sendEmailVerification(user);
+        setMessage('Verification link expired. A new verification email has been sent.');
+      }
+    }, 1000); // Check every second
+  };
+  
+  const handleCaptainLogout = async () => {
+    try {
+      await signOut(auth);
+      setCaptain(null);
+      navigate('/');
+    } catch (e) {
+      setError(e.message);
+    }
+  };
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -132,38 +233,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const checkEmailVerification = async () => {
-    if (auth.currentUser) {
-      await auth.currentUser.reload(); // Refresh user data
-      setIsVerified(auth.currentUser.emailVerified);
-    }
-  };
+      const checkEmailVerification = async () => {
+      if (auth.currentUser) {
+        await auth.currentUser.reload(); 
+        setIsVerified(auth.currentUser.emailVerified);
+      }
+    };
 
-  const handleResetPassword = async (email) => {
+  const handleCaptainResetPassword = async () => {
     try {
-      await sendPasswordResetEmail(auth, email);
+      await sendPasswordResetEmail(auth, captainData.email);
       alert('Password reset email sent. Check your inbox.');
     } catch (e) {
       setError(e.message);
     }
   };
-
-  const handlePhoneSignIn = async (phoneNumber, appVerifier) => {
+  const handleResetPassword = async () => {
     try {
-      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-      setVerificationCode(confirmationResult.verificationId);
-      setIsCodeSent(true);
-    } catch (e) {
-      setError(e.message);
-    }
-  };
-
-  const verifyPhoneCode = async (code) => {
-    try {
-      const credential = RecaptchaVerifier.credential(verificationCode, code);
-      const userCredential = await auth.signInWithCredential(credential);
-      setUser(userCredential.user);
-      navigate('/dashboard');
+      await sendPasswordResetEmail(auth, data.email);
+      alert('Password reset email sent. Check your inbox.');
     } catch (e) {
       setError(e.message);
     }
@@ -188,23 +276,28 @@ export const AuthProvider = ({ children }) => {
         handleGithubSignUp,
         handleChange,
         handleLogin,
-        handleSignup,
+        handleSubmit,
         handleLogout,
         checkEmailVerification,
         handleResetPassword,
-        handlePhoneSignIn,
-        verifyPhoneCode,
+        captainData,
+        setCaptainData,
+        message,
         data,
         user,
         error,
         isVerified,
         isCodeSent,
-        captainData,
-        setCaptainData,
-        setVerificationCode,
         setIsCodeSent,
         setCaptain,
         captain,
+        handleCaptainChange,
+        handleCaptainGoogleSignup,
+        handleCaptainGithubSignUp,
+        handleCaptainSignup,
+        handleCaptainResetPassword,
+        handleCaptainLogout,
+        handleCaptainLogin,
       }}
     >
       {children}

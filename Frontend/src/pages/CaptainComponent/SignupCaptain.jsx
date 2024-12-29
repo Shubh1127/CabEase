@@ -1,8 +1,10 @@
 import { useAuth } from '../UseContext';
+import { useState } from 'react';
+import 'react-phone-input-2/lib/style.css';
 
 const SignupCaptain = () => {
-  const { handleChange, handleSignup, captainData, error } = useAuth();
-
+  const { handleCaptainChange, handleCaptainSignup, captainData, error, } = useAuth();
+  const [message, setMessage] = useState('');
   return (
     <div>
       <h1 className="text-4xl mt-3 p-3 font-semibold">Uber</h1>
@@ -10,14 +12,14 @@ const SignupCaptain = () => {
         <h3>Let&apos;s have a ride Captain</h3>
         <h2>Signup</h2>
       </span>
-      <form className="flex flex-col w-3/4 mx-auto mt-2 border p-2" onSubmit={handleSignup}>
+      <form className="flex flex-col w-3/4 mx-auto mt-2 border p-2" onSubmit={handleCaptainSignup}>
         <label htmlFor="firstname" className="font-semibold">First Name</label>
         <input
           className="border border-black rounded p-2 m-1"
           type="text"
           name="firstname"
           value={captainData.firstname}
-          onChange={handleChange}
+          onChange={handleCaptainChange}
           required
         />
         <label htmlFor="lastname" className="font-semibold">Last Name</label>
@@ -26,24 +28,17 @@ const SignupCaptain = () => {
           type="text"
           name="lastname"
           value={captainData.lastname}
-          onChange={handleChange}
+          onChange={handleCaptainChange}
         />
-        <label htmlFor='number'>Phone Number</label>
-        <input
-          className="border border-black rounded p-2 m-1"
-          type="text"
-          name="phoneNumber"
-          value={captainData.phoneNumber}
-          onChange={handleChange}
-          required
-        />
+        <label className='font-semibold' htmlFor='Mobile'>Phone Number</label>
+        <input className='border border-black rounded p-2 ' placeholder='Enter your phone Number'/>
         <label htmlFor="email" className="font-semibold">Email</label>
         <input
           className="border border-black rounded p-2 m-1"
           type="email"
           name="email"
           value={captainData.email}
-          onChange={handleChange}
+          onChange={handleCaptainChange}
           required
         />
         <label htmlFor="password" className="font-semibold">Password</label>
@@ -52,12 +47,13 @@ const SignupCaptain = () => {
           type="password"
           name="password"
           value={captainData.password}
-          onChange={handleChange}
+          onChange={handleCaptainChange}
           required
         />
-        <button type="submit" className="bg-black text-white rounded p-1 mt-5">Signup</button>
+        <button type="submit" className="bg-black text-white rounded p-1 mt-5">Submit</button>
+        {message && <p className="text-green-500">{message}</p>}
+        {error && <p className="text-red-500">{error}</p>}
       </form>
-      {error && <p className="text-red-500">{error}</p>}
     </div>
   );
 };

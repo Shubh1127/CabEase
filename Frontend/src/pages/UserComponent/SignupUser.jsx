@@ -7,13 +7,15 @@ function SignupUser(){
         data,
         handleChange,
         error,
-        handleSubmit
+        handleSubmit,
+        message
     }=useAuth();
     return (
         <>
         <div className='h-screen '>
             <h1 className='mx-5 p-3 font-bold text-[25px]'>Uber</h1>
         <div className="h-max flex flex-col items-center justify-evenly">
+            {message && <p className='border border-black bg-green-400 rounded p-2'>{message}</p>}
             <form className="flex flex-col  gap-1 m-4 p-4 w-80 " onSubmit={handleSubmit}>
                 <label htmlFor='name' className='font-semibold'>First Name</label>
                 <input className="border border-black rounded py-2 px-2" type="text" name="firstname"  value={data.firstname} onChange={handleChange} required />
