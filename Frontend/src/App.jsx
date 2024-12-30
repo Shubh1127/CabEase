@@ -7,12 +7,16 @@ import Dashboard from './pages/Dashboard'
 import SignupUser from './pages/UserComponent/SignupUser'
 import SignupCaptain from './pages/CaptainComponent/SignupCaptain'
 import LoginCaptain from './pages/CaptainComponent/LoginCaptain'
+import UserProtectedWrapper from './pages/UserProtectedWrapper'
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<Home/>}/>
-      <Route path='/dashboard' element={<Dashboard/>}/>
+      <Route path='/dashboard' element={<UserProtectedWrapper>
+        <Dashboard/>
+      </UserProtectedWrapper>
+        }/>
       <Route path='/login' element={<UserLogin/>}/>
       <Route path='/signup' element={<SignupUser/>}/>
       <Route path='/captain-login' element={<LoginCaptain/>}/>

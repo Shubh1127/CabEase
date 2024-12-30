@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../UseContext';
+import { useUser } from '../../context/UserContext';
 function SignupUser(){
     const {
         handleGoogleSignUp,
@@ -9,7 +9,7 @@ function SignupUser(){
         error,
         handleSubmit,
         message
-    }=useAuth();
+    }=useUser();
     return (
         <>
         <div className='h-screen '>
@@ -39,7 +39,7 @@ function SignupUser(){
             <button className="text-black w-[60vw] border border-black rounded  p-2 mt-2 font-semibold " onClick={handleGoogleSignUp}><i className="fa-brands fa-google mr-1"></i> Google</button>
             <button className="text-black w-[60vw] rounded border border-black p-2 mt-2 font-semibold flex items-center justify-center gap-2 " onClick={handleGithubSignUp}><i className="fa-brands fa-github mr-1 w-3"></i>Github</button>
             </div>
-            <Link to='/captainsignup' className='  bg-green-600 p-3 rounded text-center w-80 mt-12'>Sign up as Captain</Link> 
+            <Link to='/captain-signup' className='  bg-green-600 p-3 rounded text-center w-80 mt-12 mb-2'>Sign up as Captain</Link> 
         </div>
         </div>
         </>

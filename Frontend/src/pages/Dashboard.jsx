@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
-import { useAuth } from "./UseContext"
+import { useUser } from "../context/UserContext";
 const Dashboard = () => {
-    const {user,handleLogout}=useAuth();
+    const {user,handleLogout}=useUser();
   return (
     <>
     <div className="flex justify-between mx-5 p-2">

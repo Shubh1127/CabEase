@@ -1,7 +1,7 @@
 
 
 // import '../../App.css'
-import {  useAuth } from '../UseContext';
+import { useUser } from '../../context/UserContext';
 function UserLogin() {
   const {
     data,
@@ -11,7 +11,7 @@ function UserLogin() {
     handleLogin,
     handleGithubSignUp,
     handleResetPassword,
-  }=useAuth();
+  }=useUser();
 
 
   return (
