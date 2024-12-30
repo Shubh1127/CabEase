@@ -3,11 +3,13 @@ import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 // import './App.css'/
 import UserLogin from './pages/UserComponent/UserLogin'  
-import Dashboard from './pages/Dashboard'
+import Dashboard from './pages/UserComponent/Dashboard'
 import SignupUser from './pages/UserComponent/SignupUser'
 import SignupCaptain from './pages/CaptainComponent/SignupCaptain'
 import LoginCaptain from './pages/CaptainComponent/LoginCaptain'
-import UserProtectedWrapper from './pages/UserProtectedWrapper'
+import UserProtectedWrapper from './pages/UserComponent/UserProtectedWrapper'
+import CaptainProtectedWrapper from './pages/CaptainComponent/CaptainProtectedWrapper'
+import CaptainHome from './pages/CaptainComponent/CaptainHome'
 
 function App() {
   return (
@@ -16,6 +18,10 @@ function App() {
       <Route path='/dashboard' element={<UserProtectedWrapper>
         <Dashboard/>
       </UserProtectedWrapper>
+        }/>
+      <Route path='/captain-home' element={<CaptainProtectedWrapper>
+        <CaptainHome/>
+      </CaptainProtectedWrapper>
         }/>
       <Route path='/login' element={<UserLogin/>}/>
       <Route path='/signup' element={<SignupUser/>}/>

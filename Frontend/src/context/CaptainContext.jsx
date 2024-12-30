@@ -44,6 +44,8 @@ export const CaptainAuthProvider = ({ children }) => {
         try {
             const CaptainCredential = await createUserWithEmailAndPassword(auth, captainData.email, captainData.password);
             const captain = CaptainCredential.user;
+            const captainToken=await captain.getIdToken();
+            localStorage.setItem('captainToken',captainToken)
             await sendEmailVerification(captain);
             const CaptainToken = await captain.getIdToken();
             localStorage.setItem('captainToken', CaptainToken);
@@ -73,7 +75,7 @@ export const CaptainAuthProvider = ({ children }) => {
             if (user.emailVerified) {
                 setIsVerified(true);
                 clearInterval(intervalId);
-                navigate('/dashboard');
+                navigate('/captain-home');
             } else {
                 setMessage('Verify your email to login.');
                 await sendEmailVerification(user);
@@ -88,17 +90,20 @@ export const CaptainAuthProvider = ({ children }) => {
             const result = await signInWithPopup(auth, GoogleProvider);
             const captain = result.user;
             if (captain) {
+                localStorage.setItem('captainToken',await captain.getIdToken())
                 await setDoc(doc(db, 'captains', captain.uid), {
                     firstname: captainData.firstname,
                     lastname: captainData.lastname,
                     email: captain.email,
                     phoneNumber: captainData.phoneNumber,
-                    color: vehicleInfo.color,
-                    capacity: vehicleInfo.capacity,
-                    numberPlate: vehicleInfo.numberPlate,
-                    vehicleType: vehicleInfo.vehicleType,
+                    vehicleInfo:{
+                        color: vehicleInfo.color,
+                        capacity: vehicleInfo.capacity,
+                        numberPlate: vehicleInfo.numberPlate,
+                        vehicleType: vehicleInfo.vehicleType,
+                    }
                 });
-                navigate('/dashboard');
+                navigate('/captain-home');
                 setCaptain(captain);
             }
         } catch (e) {
@@ -112,17 +117,19 @@ export const CaptainAuthProvider = ({ children }) => {
             const result = await signInWithPopup(auth, GithubProvider);
             const captain = result.user;
             if (captain) {
+                localStorage.setItem('captainToken',await captain.getIdToken())
                 await setDoc(doc(db, 'captains', captain.uid), {
                     firstname: captainData.firstname,
                     lastname: captainData.lastname,
                     email: captain.email,
-                    phoneNumber: captainData.phoneNumber,
-                    color: vehicleInfo.color,
-                    capacity: vehicleInfo.capacity,
-                    numberPlate: vehicleInfo.numberPlate,
-                    vehicleType: vehicleInfo.vehicleType,
+                    vehicleInfo:{
+                        color: vehicleInfo.color,
+                        capacity: vehicleInfo.capacity,
+                        numberPlate: vehicleInfo.numberPlate,
+                        vehicleType: vehicleInfo.vehicleType,
+                    }
                 });
-                navigate('/dashboard');
+                navigate('/captain-home');
                 setCaptain(captain);
             }
         } catch (e) {
@@ -136,11 +143,13 @@ export const CaptainAuthProvider = ({ children }) => {
         try {
             const CaptainCredential = await signInWithEmailAndPassword(auth, captainData.email, captainData.password);
             const captain = CaptainCredential.user;
+            const captainToken=await captain.getIdToken();
+            localStorage.setItem('captainToken',captainToken)
             await captain.reload();
             if (captain.emailVerified) {
                 setIsVerified(true);
                 setError('');
-                navigate('/dashboard');
+                navigate('/captain-home');
             } else {
                 setIsVerified(false);
                 setError('Please verify your email before logging in.');
@@ -156,6 +165,8 @@ export const CaptainAuthProvider = ({ children }) => {
         try {
             await signOut(auth);
             setCaptain(null);
+            setError('');
+            localStorage.removeItem('captainToken')
             navigate('/');
         } catch (e) {
             setError(e.message);
