@@ -47,6 +47,31 @@ export const UserProvider = ({ children }) => {
             startVerificationCheck(user);
         } catch (e) {
             setError(e.message);
+            switch(e.code){
+                case 'auth/email-already-in-use':
+                    setError('Email already in use');
+                    break;
+                case 'auth/weak-password':
+                    setError('Password should be at least 6 characters');
+                    break;
+                case 'auth/invalid-email':
+                    setError('Invalid email');
+                    break;
+                case 'auth/operation-not-allowed':
+                    setError('Email verification is not allowed for this project');
+                    break;
+                case 'auth/argument-error':
+                    setError('Invalid argument');
+                    break;
+                case 'auth/too-many-requests':
+                    setError('Too many requests. Try again later');
+                    break;
+                case 'auth/network-request-failed':
+                    setError('Check your Network Conection');
+                    break;
+                default:
+                    setError('Something went wrong');
+                    }
         }
     };
 
@@ -69,7 +94,31 @@ export const UserProvider = ({ children }) => {
                 setError('');
             }
         } catch (e) {
-            setError(e.message);
+            switch(e.code){
+                case 'auth/email-already-in-use':
+                    setError('Email already in use');
+                    break;
+                case 'auth/weak-password':
+                    setError('Password should be at least 6 characters');
+                    break;
+                case 'auth/invalid-email':
+                    setError('Invalid email');
+                    break;
+                case 'auth/operation-not-allowed':
+                    setError('Email verification is not allowed for this project');
+                    break;
+                case 'auth/argument-error':
+                    setError('Invalid argument');
+                    break;
+                case 'auth/too-many-requests':
+                    setError('Too many requests. Try again later');
+                    break;
+                case 'auth/network-request-failed':
+                    setError('Check your Network Conection');
+                    break;
+                default:
+                    setError('Something went wrong');
+                    }
         }
     };
 
@@ -90,7 +139,31 @@ export const UserProvider = ({ children }) => {
                 setUser(user);
             }
         } catch (e) {
-            setError(e.message);
+            switch(e.code){
+                case 'auth/email-already-in-use':
+                    setError('Email already in use');
+                    break;
+                case 'auth/weak-password':
+                    setError('Password should be at least 6 characters');
+                    break;
+                case 'auth/invalid-email':
+                    setError('Invalid email');
+                    break;
+                case 'auth/operation-not-allowed':
+                    setError('Email verification is not allowed for this project');
+                    break;
+                case 'auth/argument-error':
+                    setError('Invalid argument');
+                    break;
+                case 'auth/too-many-requests':
+                    setError('Too many requests. Try again later');
+                    break;
+                case 'auth/network-request-failed':
+                    setError('Check your Network Conection');
+                    break;
+                default:
+                    setError('Something went wrong');
+                    }
         }
     };
 
@@ -106,7 +179,31 @@ export const UserProvider = ({ children }) => {
             setMessage('');
             setError('');
         } catch (e) {
-            setError(e.message);
+            switch(e.code){
+                case 'auth/user-not-found':
+                    setError('User not found');
+                    break;
+                case 'auth/wrong-password':
+                    setError('Wrong password');
+                    break;
+                case 'auth/invalid-email':
+                    setError('Invalid email');
+                    break;
+                case 'auth/operation-not-allowed':
+                    setError('Email verification is not allowed for this project');
+                    break;
+                case 'auth/argument-error':
+                    setError('Invalid argument');
+                    break;
+                case 'auth/too-many-requests':
+                    setError('Too many requests. Try again later');
+                    break;
+                case 'auth/network-request-failed':
+                    setError('Check your Network Conection');
+                    break;
+                default:
+                    setError('Something went wrong');
+                    }
         }
     };
 

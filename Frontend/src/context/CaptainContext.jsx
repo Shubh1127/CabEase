@@ -50,8 +50,10 @@ export const CaptainAuthProvider = ({ children }) => {
             const CaptainToken = await captain.getIdToken();
             localStorage.setItem('captainToken', CaptainToken);
             await setDoc(doc(db, 'captains', captain.uid), {
-                firstname: captainData.firstname,
-                lastname: captainData.lastname,
+                fullname:{
+                    firstname: captainData.firstname,
+                    lastname: captainData.lastname,
+                },
                 email: captain.email,
                 phoneNumber: captainData.phoneNumber,
                 vehicleInfo:{
@@ -65,7 +67,25 @@ export const CaptainAuthProvider = ({ children }) => {
             setMessage('Email has been sent. Verify your email.');
             startVerificationCheck(captain);
         } catch (e) {
-            setError(e.message);
+            switch(e.code){
+                case 'auth/email-already-in-use':
+                    setError('Email already in use');
+                    break;
+                case 'auth/invalid-email':
+                    setError('Invalid email');
+                    break;
+                case 'auth/weak-password':
+                    setError('Weak password');
+                    break;
+                case 'auth/operation-not-allowed':
+                    setError('Operation not allowed');
+                    break;
+                case 'auth/network-request-failed':
+                    setError('Check your Network ');
+                    break;
+                default:
+                    setError('Something went wrong');
+            }
         }
     };
 
@@ -107,7 +127,25 @@ export const CaptainAuthProvider = ({ children }) => {
                 setCaptain(captain);
             }
         } catch (e) {
-            setError(e.message);
+            switch(e.code){
+                case 'auth/email-already-in-use':
+                    setError('Email already in use');
+                    break;
+                case 'auth/invalid-email':
+                    setError('Invalid email');
+                    break;
+                case 'auth/weak-password':
+                    setError('Weak password');
+                    break;
+                case 'auth/operation-not-allowed':
+                    setError('Operation not allowed');
+                    break;
+                case 'auth/network-request-failed':
+                    setError('Check your Network ');
+                    break;
+                default:
+                    setError('Something went wrong');
+            }
         }
     };
 
@@ -133,8 +171,27 @@ export const CaptainAuthProvider = ({ children }) => {
                 setCaptain(captain);
             }
         } catch (e) {
-            setError(e.message);
+            switch(e.code){
+                case 'auth/email-already-in-use':
+                    setError('Email already in use');
+                    break;
+                case 'auth/invalid-email':
+                    setError('Invalid email');
+                    break;
+                case 'auth/weak-password':
+                    setError('Weak password');
+                    break;
+                case 'auth/operation-not-allowed':
+                    setError('Operation not allowed');
+                    break;
+                case 'auth/network-request-failed':
+                    setError('Check your Network ');
+                    break;
+                default:
+                    setError('Something went wrong');
+            }
         }
+
     };
 
     // Captain login function
@@ -156,7 +213,22 @@ export const CaptainAuthProvider = ({ children }) => {
                 await signOut(auth);
             }
         } catch (e) {
-            setError(e.message);
+            switch(e.code){
+                case 'auth/invalid-email':
+                    setError('Invalid email');
+                    break;  
+                case 'auth/user-not-found':
+                    setError('User not found');
+                    break;
+                case 'auth/wrong-password':
+                    setError('Wrong password');
+                    break;
+                case 'auth/network-request-failed':
+                    setError('Check your Network ');
+                    break;
+                default:
+                    setError('Something went wrong');
+                    }
         }
     };
 

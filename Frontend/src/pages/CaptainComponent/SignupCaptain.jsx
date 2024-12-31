@@ -8,8 +8,8 @@ const SignupCaptain = () => {
     <div>
       <h1 className="text-4xl mt-3 p-3 font-semibold">Uber</h1>
       <span className="text-center font-bold">
-        <h3>Let&apos;s have a ride Captain</h3>
-        <h2>Signup</h2>
+       {message && <p className='bg-green-400 w-10/12 ms-10 border border-black rounded p-2 text-white'>{message}</p> 
+       || <p className='text-xl'>Let&apos;s have a ride captain</p>}
       </span>
       <form className="flex flex-col w-3/4 mx-auto mt-2 border p-2" onSubmit={handleCaptainSignup}>
       <div className='flex'>

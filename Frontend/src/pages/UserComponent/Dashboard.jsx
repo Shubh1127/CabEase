@@ -21,7 +21,7 @@ const Dashboard = () => {
         <input className="bg-[#eee] px-12 py-2 text-base rounded-lg w-full mt-3" type="text" placeholder="Enter your  destination " />
       </form>
       </div>
-      <div className="h-[70%] bg-red-500 hidden">
+      <div className="h-[70%] bg-red-500 ">
         
       </div>
     </div>

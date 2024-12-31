@@ -16,6 +16,7 @@ function SignupUser(){
             <h1 className='mx-5 p-3 font-bold text-[25px]'>Uber</h1>
         <div className="h-max flex flex-col items-center justify-evenly">
             {message && <p className='border border-black bg-green-400 rounded p-2'>{message}</p>}
+             {error && <p className='border border-black text-red-500 rounded p-2'>{error}</p>}
             <form className="flex flex-col  gap-1 m-4 p-4 w-80 " onSubmit={handleSubmit}>
                 <label htmlFor='name' className='font-semibold'>First Name</label>
                 <input className="border border-black rounded py-2 px-2" type="text" name="firstname"  value={data.firstname} onChange={handleChange} required />
@@ -27,7 +28,7 @@ function SignupUser(){
                 <input className="border border-black rounded py-2 px-2" type="email" name="email" id="email" value={data.email} onChange={handleChange} required />
                 <label className="font-semibold" htmlFor="password">Password</label>
                 <input className="border border-black rounded py-2 px-2" type="password" name="password" id="password" value={data.password} onChange={handleChange} required />
-                <p className='text-red-500 font-bold'>{error}</p>
+                {/* <p className='text-red-500 font-bold'>{error}</p> */}
                 <button type="submit" className="w-full bg-black text-white p-2 mt-2 rounded font-semibold">Signup</button>
                 <Link to='/login' className='text-blue-500  p-1  text-center'>Already have Account? Login Here
                 </Link>

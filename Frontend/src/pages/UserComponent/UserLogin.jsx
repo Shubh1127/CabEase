@@ -12,10 +12,9 @@ function UserLogin() {
     handleGithubSignUp,
     handleResetPassword,
   }=useUser();
-
-
   return (
     <div className="p-5 w-full h-screen">
+      {error &&  <p className='mx-5 p-5 font-semibold text-red-500 text-xk border border-black rounded'>{error}</p>}
       <form className="flex flex-col mt-5 p-4 " onSubmit={handleLogin}>
         <label className="font-semibold" htmlFor="email">
           Email
