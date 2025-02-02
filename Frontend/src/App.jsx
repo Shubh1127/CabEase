@@ -10,6 +10,7 @@ import LoginCaptain from './pages/CaptainComponent/LoginCaptain'
 import UserProtectedWrapper from './pages/UserComponent/UserProtectedWrapper'
 import CaptainProtectedWrapper from './pages/CaptainComponent/CaptainProtectedWrapper'
 import CaptainHome from './pages/CaptainComponent/CaptainHome'
+import Riding from './pages/Riding'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <Route path='/signup' element={<SignupUser/>}/>
       <Route path='/captain-login' element={<LoginCaptain/>}/>
       <Route path='/captain-signup' element={<SignupCaptain/>}/>
+      <Route path ='/riding' element ={<Riding/>}/>
       <Route path='*'  element={<h1 className='text-center text-[100px]'>404 Not Found</h1>}/>
     </Routes>
   

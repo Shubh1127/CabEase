@@ -5,7 +5,7 @@ import 'react-phone-input-2/lib/style.css';
 const SignupCaptain = () => {
   const { handleCaptainChange, handleCaptainSignup, captainData, error,handleCaptainGoogleSignup,handleCaptainGithubSignUp,message,vehicleInfo,handleVechileChange } = useCaptainAuth();
   return (
-    <div>
+    <div className='h-screen'>
       <h1 className="text-4xl mt-3 p-3 font-semibold">Uber</h1>
       <span className="text-center font-bold">
        {message && <p className='bg-green-400 w-10/12 ms-10 border border-black rounded p-2 text-white'>{message}</p> 
@@ -37,7 +37,7 @@ const SignupCaptain = () => {
           </div>
           </div>
         <label className='font-semibold ms-1' htmlFor='Mobile'>Phone Number</label>
-        <input className='border border-black rounded p-2 ' name='phoneNumber' value={captainData.phoneNumber} onChange={handleCaptainChange} placeholder='Enter your phone Number'/>
+        <input className='border border-black rounded p-2 m-1 ' name='phoneNumber' value={captainData.phoneNumber} onChange={handleCaptainChange} placeholder='Enter your phone Number'/>
         <label htmlFor="email" className="font-semibold ms-1">Email</label>
         <input
           className="border border-black rounded p-2 m-1"
@@ -119,6 +119,9 @@ const SignupCaptain = () => {
         <button className='border border-black rounded p-1 w-[60vw] ' onClick={handleCaptainGoogleSignup}><i className="fa-brands fa-google mr-1 w-4"></i>Google</button>
         <button className='border border-black rounded p-1 w-[60vw] ' onClick={handleCaptainGithubSignUp}><i className="fa-brands fa-github mr-2 w-4"></i>Github</button>
       </div>
+      {/* <div className='w-full'>
+      <Link to='/signup' className='  bg-green-600 p-3 mx-auto rounded text-center text-white font-medium w-screen mt-12 mb-2'>Sign up as User</Link>
+      </div> */}
     </div>
   );
 };
