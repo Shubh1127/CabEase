@@ -25,7 +25,7 @@ const CaptainHome = () => {
           alt=""
         />
       </div>
-      <div className="h-1/2 p-4">
+      <div className="h-1/2 p-5">
         <div className="">
           <div>
             <img src="" />
