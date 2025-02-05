@@ -4,7 +4,7 @@ import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signInWithEmai
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import PropTypes from 'prop-types';
-
+import axios from 'axios';
 const UserContext = createContext();
 
 export const useUser = () => {
@@ -43,6 +43,8 @@ export const UserProvider = ({ children }) => {
                 email: user.email,
                 phoneNumber: data.phoneNumber,
             });
+            await axios.post('http://localhost:3000/users/register',data)
+
             setMessage('Verification email is sent. Verify your email first.');
             startVerificationCheck(user);
         } catch (e) {
@@ -170,6 +172,7 @@ export const UserProvider = ({ children }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
+            await axios.post('http://localhost:3000/users/login',data)
             const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
             const user = userCredential.user;
             const idToken = await user.getIdToken();

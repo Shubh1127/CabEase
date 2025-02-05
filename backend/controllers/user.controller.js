@@ -4,38 +4,29 @@ const {validationResult}=require('express-validator')
 const blacklistTokenModel=require('../Models/blacklistToken.model')
 
 module.exports.registerUser=async (req,res,next)=>{
-    const errors=validationResult(req)
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors:errors.array()})
-    }
-    
-    const {fullname,email,password,privateKey}=req.body;
+    const {firstname,lastname,email,password,phoneNumber}=req.body;
     const isUserExist=await userModel.findOne({email});
     if(isUserExist){
-        return res.status(400).json({message:'use already exist'})
+        return res.status(400).json({message:'user already exist'})
     }
     const hashedPassword= await userModel.hashPassword(password)
-    const hashedKey=await userModel.hashKey(privateKey)
     
     const user=await userService.createUser({
-        firstname:fullname.firstname,
-        lastname:fullname.lastname,
+        firstname,
+        lastname,
         email,
         password:hashedPassword,
-        privateKey:hashedKey,
+        phoneNumber,
     })
     
     const token=user.generateAuthToken();
+    res.cookie('token',token)
     
     res.status(200).json({token,user});
     
 }
 
 module.exports.loginUser=async (req,res,next)=>{
-    const errors=validationResult(req)
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors:errors.array()})
-    }
     const {email,password}=req.body;
 
     const user=await userModel.findOne({email}).select('+password');

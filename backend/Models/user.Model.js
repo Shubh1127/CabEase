@@ -25,10 +25,9 @@ const UserSchema=new mongoose.Schema({
         required:true,
         select:false,
     },
-    privateKey:{
-        type:String,
-        required:true,
-        minlength:[4,'Private key must be at least 4 characters long']
+    phoneNumber:{
+        type:Number,
+        minlength:[10,'Phone number must be at least 10 characters long']
     },
     socketId:{
         type:String,
