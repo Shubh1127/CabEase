@@ -11,7 +11,8 @@ import UserProtectedWrapper from './pages/UserComponent/UserProtectedWrapper'
 import CaptainProtectedWrapper from './pages/CaptainComponent/CaptainProtectedWrapper'
 import CaptainHome from './pages/CaptainComponent/CaptainHome'
 import Riding from './pages/Riding'
-
+import CaptainRiding from './pages/CaptainComponent/CaptainRiding'
+import 'remixicon/fonts/remixicon.css'
 function App() {
   return (
     <Routes>
@@ -27,6 +28,7 @@ function App() {
       <Route path='/login' element={<UserLogin/>}/>
       <Route path='/signup' element={<SignupUser/>}/>
       <Route path='/captain-login' element={<LoginCaptain/>}/>
+      <Route path='/captain-riding' element={<CaptainRiding/>}/>
       <Route path='/captain-signup' element={<SignupCaptain/>}/>
       <Route path ='/riding' element ={<Riding/>}/>
       <Route path='*'  element={<h1 className='text-center text-[100px]'>404 Not Found</h1>}/>
