@@ -19,7 +19,7 @@ function SignupUser(){
              {error && <p className='border border-black text-red-500 rounded p-2'>{error}</p>}
             <form className="flex flex-col  gap-1 m-4 p-4 w-80 " onSubmit={handleSubmit}>
                 <label htmlFor='name' className='font-semibold'>First Name</label>
-                <input className="border border-black rounded py-2 px-2" type="text" name="firstname"  value={data.firstname} onChange={handleChange} required />
+                <input className="border border-black rounded py-2 px-3" type="text" name="firstname"  value={data.firstname} onChange={handleChange} required />
                 <label htmlFor='name' className='font-semibold'>Last Name</label>
                 <input className="border border-black rounded py-2 px-2" type="text" name="lastname"  value={data.lastname} onChange={handleChange} />
                 <label className="font-semibold" htmlFor="phone">Phone Number</label>
