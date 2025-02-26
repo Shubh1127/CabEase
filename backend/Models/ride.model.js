@@ -43,3 +43,6 @@ const rideScehma=new mongoose.Schema({
         type:String
     }
 })
+
+const rideModel=mongoose.model('Ride',rideScehma);
+module.exports=rideModel;
