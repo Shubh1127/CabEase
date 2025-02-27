@@ -1,6 +1,6 @@
 const rideModel=require('../models/ride.model');
 const mapsService=require('./maps.service')
-
+const crypto=require('crypto');
 
 
 async function getFare(pickup,destination){
@@ -32,6 +32,13 @@ async function getFare(pickup,destination){
     return fare;
 }
 
+function getOtp(num){
+    function generationOtp(num){
+        const otp=crypto.randomInt(Math.pow(10,num-1),Math.pow(10,num)).toString();
+        return otp;
+    }
+    return generationOtp(num);
+}
 module.exports.createRide=async ({userId,pickup,destination,vehicleType})=>{
     if(!userId || !pickup || !destination || !vehicleType){
         throw new Error('All fields are required')
