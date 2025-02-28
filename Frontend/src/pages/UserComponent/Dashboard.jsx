@@ -99,7 +99,7 @@ const Dashboard = () => {
               }}
               className="flex flex-col"
             >
-              <div className="line absolute h-16 w-1 top-[47%] left-10 bg-gray-900 rounded-full"></div>
+              <div className="line absolute h-15 w-1 top-[47%] left-10 bg-gray-900 rounded-full"></div>
               <input
                 className="bg-[#eee] px-12 py-2 text-lg rounded-lg w-full mt-5"
                 type="text"
