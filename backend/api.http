@@ -14,3 +14,12 @@ Content-Type: application/json
   "destination": "Mumbai",
   "vehicleType": "car"
 }
+###
+GET http://localhost:3000/maps/get-suggestions HTTP/1.1
+Content-Type:application/json
+{
+  "input":{
+    "pickup": "Delhi",
+    "destination": "Mumbai"
+  }
+}

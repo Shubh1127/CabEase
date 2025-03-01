@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const panelRef = useRef(null);
+  const [currentField, setCurrentField] = useState("");
   const panelCloseRef = useRef(null);
   const VehiclePanelRef = useRef(null);
   const vehicleFoundRef = useRef(null);
@@ -36,10 +37,14 @@ const Dashboard = () => {
 
     if (value.length > 2) {
       try {
-        const response = await axios.post("http://localhost:3000/locations/suggestions", {
-          query: value,
+        const response = await axios.get("http://localhost:3000/maps/get-suggestions", {
+          params: {input:value},
+          headers:{
+            Authorization: `Bearer ${localStorage.getItem("idToken")}`,
+          }
         });
         setSuggestions(response.data.suggestions);
+        setCurrentField(name);
         setPanelOpen(true);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
@@ -49,12 +54,13 @@ const Dashboard = () => {
     }
   };
 
-  const handleSuggestionClick = (suggestion, field) => {
+  const handleSuggestionClick = (suggestion) => {
     setInfo({
       ...info,
-      [field]: suggestion,
+      [currentField]: suggestion.description,
     });
-    setPanelOpen(false);
+    // setVehiclePanel(true);
+    // setPanelOpen(false);
   };
 
   const submitHandler = (e) => {
@@ -147,6 +153,15 @@ const Dashboard = () => {
                 placeholder="Enter your destination"
               />
             </form>
+            { panelOpen && info.pickup && info.destination.length>6 &&(
+              <button
+              onClick={() => {
+                setVehiclePanel(true);
+                setPanelOpen(false);
+                
+              }}
+              className="bg-black text-white text-lg font-semibold rounded-lg mt-5 p-3" >Find Trip</button>
+             )}
           </div>
           <div ref={panelRef} className="bg-white h-[0]">
             <LocationSearchPanel
