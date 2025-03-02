@@ -123,9 +123,9 @@ const Dashboard = () => {
     }
   }
 
-  async function createRide=(vehicleType)=>{
+  async function createRide(vehicleType){
     try{
-      const response=await axios.post('http://localhost:3000/rides/create-ride',{
+      const response=await axios.post('http://localhost:3000/rides/create',{
         pickup:info.pickup,
         destination:info.destination,
         vehicleType,
@@ -208,7 +208,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div ref={VehiclePanelRef} className="fixed z-10 bottom-0 w-full bg-white translate-y-full px-3 py-10 pt-14">
-          <VehiclePanel fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
+          <VehiclePanel  createRide={createRide} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
         </div>
         <div ref={ConfirmRideRef} className="fixed z-10 bottom-0 w-full bg-white translate-y-full px-3 py-6 pt-12">
           <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />

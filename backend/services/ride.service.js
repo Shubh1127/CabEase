@@ -8,7 +8,6 @@ async function getFare(pickup,destination){
         throw new Error('pickup and destination are required')
     }
     const distanceTime=await mapsService.getDistanceTime(pickup,destination);
-    console.log(distanceTime);
     const baseFare={
         auto:30,
         car:50,
@@ -46,7 +45,6 @@ module.exports.createRide=async ({userId,pickup,destination,vehicleType})=>{
         throw new Error('All fields are required')
     }
     const fare=await getFare(pickup,destination);
-    console.log(fare);
     const ride= rideModel.create({
         user:userId,
         pickup,
