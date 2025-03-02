@@ -26,11 +26,11 @@ let CaptainSchema=new mongoose.Schema({
         required:true,
         select:false,
     },
-    privateKey:{
-        type:String,
-        required:true,
-        minlength:[4,'Private key must be at least 6 characters long']
-    },
+    // privateKey:{
+    //     type:String,
+    //     required:true,
+    //     minlength:[4,'Private key must be at least 6 characters long']
+    // },
     socketId:{
         type:String,
     },
@@ -78,12 +78,12 @@ CaptainSchema.methods.generateAuthToken= function(){
 CaptainSchema.methods.comparePassword=async function (password){
     return await bcrypt.compare(password,this.password)
 }
-CaptainSchema.methods.comparePrivateKey=async function (privateKey){
-    return await bcrypt.compare(privateKey,this.privateKey)
-}
-CaptainSchema.statics.hashKey=async function (privateKey){
-    return await bcrypt.hash(privateKey,10);
-}
+// CaptainSchema.methods.comparePrivateKey=async function (privateKey){
+//     return await bcrypt.compare(privateKey,this.privateKey)
+// }
+// CaptainSchema.statics.hashKey=async function (privateKey){
+//     return await bcrypt.hash(privateKey,10);
+// }
 CaptainSchema.statics.hashPassword=async function (password){
     return await bcrypt.hash(password,10);
 }

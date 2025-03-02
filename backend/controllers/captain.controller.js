@@ -58,23 +58,23 @@ module.exports.loginCaptain=async (req,res,next)=>{
 
     res.status(200).json({token,Captain})
 }
-module.exports.forgotPassword=async(req,res,next)=>{
-    const {email,privateKey,newpassword,confirmpassword}=req.body;
-    const captain=await CaptainModel.findOne({email});
-    if(!captain){
-        return res.status(404).json({message:'email does not match'})
-    }
-    const isMatch=await captain.comparePrivateKey(privateKey)
-    if(!isMatch){
-        return res.status(401).json({message:'Private key incorrect'})
-    }
-    if(newpassword!==confirmpassword){
-        return res.status(400).json({message:'Password does not match'})
-    }
-    const hashedPassword= await CaptainModel.hashPassword(newpassword)
-    await CaptainModel.findByIdAndUpdate(captain._id,{password:hashedPassword})
-    res.status(200).json({message:'Password updated'})
-}
+// module.exports.forgotPassword=async(req,res,next)=>{
+//     const {email,privateKey,newpassword,confirmpassword}=req.body;
+//     const captain=await CaptainModel.findOne({email});
+//     if(!captain){
+//         return res.status(404).json({message:'email does not match'})
+//     }
+//     const isMatch=await captain.comparePrivateKey(privateKey)
+//     if(!isMatch){
+//         return res.status(401).json({message:'Private key incorrect'})
+//     }
+//     if(newpassword!==confirmpassword){
+//         return res.status(400).json({message:'Password does not match'})
+//     }
+//     const hashedPassword= await CaptainModel.hashPassword(newpassword)
+//     await CaptainModel.findByIdAndUpdate(captain._id,{password:hashedPassword})
+//     res.status(200).json({message:'Password updated'})
+// }
 module.exports.getCaptainProfile=async(req,res,next)=>{
     return res.status(200).json({captain:req.captain})
 

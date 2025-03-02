@@ -18,12 +18,12 @@ router.post('/login',[
     body('email').isEmail().withMessage('Invalid Email'),
     body('password').isLength({min:6}).withMessage('Pasword must be at least 6 characters long')
 ],captainController.loginCaptain)
-router.post('/forgot',[
-    body('email').isEmail().withMessage('Invalid Email'),
-    body('privateKey').isLength({min:4}).withMessage('Private key must be at least 4 characters long'),
-    body('newpassword').isLength({min:6}).withMessage('Pasword must be at least 6 characters long'),
-    body('confirmpassword').isLength({min:6}).withMessage('Pasword must be at least 6 characters long'),
-],captainController.forgotPassword)
+// router.post('/forgot',[
+//     body('email').isEmail().withMessage('Invalid Email'),
+//     body('privateKey').isLength({min:4}).withMessage('Private key must be at least 4 characters long'),
+//     body('newpassword').isLength({min:6}).withMessage('Pasword must be at least 6 characters long'),
+//     body('confirmpassword').isLength({min:6}).withMessage('Pasword must be at least 6 characters long'),
+// ],captainController.forgotPassword)
 router.get('/profile',authMiddleware.authCaptain,captainController.getCaptainProfile)
 
 router.get('/logout',authMiddleware.authCaptain,captainController.logoutCaptain)

@@ -45,24 +45,24 @@ module.exports.loginUser=async (req,res,next)=>{
 
     res.status(200).json({token,user})
 }
-module.exports.forgotPassword=async (req,res,next)=>{
-    const{email,privateKey,newpassword,confirmpassword}=req.body;
-    const user=await userModel.findOne({email});
-    if(!user){
-        return res.status(404).json({message:'email does not match'})
-    }
-    // console.log(user)
-    const isMatch=await user.compareKey(privateKey);
-    if(!isMatch){
-        return res.status(400).json({message:'key  does not match'})
-    }
-    if(newpassword!==confirmpassword){
-        return res.status(400).json({message:'Password do not match'})
-    }
-    const hashedPassword=await userModel.hashPassword(newpassword);
-    await userModel.findByIdAndUpdate(user._id,{password:hashedPassword});
-    return res.status(200).json({message:'Password reset successful'})
-}
+// module.exports.forgotPassword=async (req,res,next)=>{
+//     const{email,privateKey,newpassword,confirmpassword}=req.body;
+//     const user=await userModel.findOne({email});
+//     if(!user){
+//         return res.status(404).json({message:'email does not match'})
+//     }
+//     // console.log(user)
+//     const isMatch=await user.compareKey(privateKey);
+//     if(!isMatch){
+//         return res.status(400).json({message:'key  does not match'})
+//     }
+//     if(newpassword!==confirmpassword){
+//         return res.status(400).json({message:'Password do not match'})
+//     }
+//     const hashedPassword=await userModel.hashPassword(newpassword);
+//     await userModel.findByIdAndUpdate(user._id,{password:hashedPassword});
+//     return res.status(200).json({message:'Password reset successful'})
+// }
 
 module.exports.getUserProfile=async (req,res,next)=>{
     res.status(200).json(req.user)

@@ -27,6 +27,7 @@ const Dashboard = () => {
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
   const [vehicleFound, setVehicleFound] = useState(false);
   const [waitingForDriver, setWaitingForDriver] = useState(false);
+  const [fare,setFare]=useState({});
 
   const handleChange = async (e) => {
     const { name, value } = e.target;
@@ -102,6 +103,42 @@ const Dashboard = () => {
     });
   }, [waitingForDriver]);
 
+  async function findTrip(){
+    setVehiclePanel(true);
+    setPanelOpen(false);
+    try{
+      const response=await axios.get('http://localhost:3000/rides/get-fare',{
+        params:{
+          pickup:info.pickup,
+          destination:info.destination
+        },
+        headers:{
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+    })
+    setFare(response.data.fare);
+
+    }catch(err){
+      console.error(err); 
+    }
+  }
+
+  async function createRide=(vehicleType)=>{
+    try{
+      const response=await axios.post('http://localhost:3000/rides/create-ride',{
+        pickup:info.pickup,
+        destination:info.destination,
+        vehicleType,
+      },{
+        headers:{
+        Authorization:`bearer ${localStorage.getItem('token')}`
+      }
+    })
+    console.log(response.data);
+    }catch(err){
+      console.error(err);
+    }
+  }
   return (
     <>
       <div className="h-screen relative overflow-hidden ">
@@ -156,11 +193,9 @@ const Dashboard = () => {
             { panelOpen && info.pickup && info.destination.length>6 &&(
               <button
               onClick={() => {
-                setVehiclePanel(true);
-                setPanelOpen(false);
-                
+                findTrip();
               }}
-              className="bg-black text-white text-lg font-semibold rounded-lg mt-5 p-3" >Find Trip</button>
+              className="bg-black text-white text-lg font-semibold rounded-lg mt-5 p-3 w-full" >Find Trip</button>
              )}
           </div>
           <div ref={panelRef} className="bg-white h-[0]">
@@ -173,7 +208,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div ref={VehiclePanelRef} className="fixed z-10 bottom-0 w-full bg-white translate-y-full px-3 py-10 pt-14">
-          <VehiclePanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
+          <VehiclePanel fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
         </div>
         <div ref={ConfirmRideRef} className="fixed z-10 bottom-0 w-full bg-white translate-y-full px-3 py-6 pt-12">
           <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />

@@ -41,15 +41,15 @@ UserSchema.methods.generateAuthToken=function(){
 UserSchema.methods.comparePassword=async function (password){
     return await bcrypt.compare(password,this.password)
 }
-UserSchema.methods.compareKey=async function (privateKey){
-    return await bcrypt.compare(privateKey,this.privateKey)
-}
+// UserSchema.methods.compareKey=async function (privateKey){
+//     return await bcrypt.compare(privateKey,this.privateKey)
+// }
 UserSchema.statics.hashPassword=async function (password){
     return await bcrypt.hash(password,10);
 }
-UserSchema.statics.hashKey=async function (privateKey){
-    return await bcrypt.hash(privateKey,10);
-}
+// UserSchema.statics.hashKey=async function (privateKey){
+//     return await bcrypt.hash(privateKey,10);
+// }
 
 const UserModel=mongoose.model('user',UserSchema);
 

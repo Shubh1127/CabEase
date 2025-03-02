@@ -172,10 +172,12 @@ export const UserProvider = ({ children }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3000/users/login',data)
+            const response=await axios.post('http://localhost:3000/users/login',data)
             const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
             const user = userCredential.user;
             const idToken = await user.getIdToken();
+            const token=response.data.token;
+            localStorage.setItem('token',token);
             await user.reload();
             localStorage.setItem('idToken', idToken);
             navigate('/dashboard');
