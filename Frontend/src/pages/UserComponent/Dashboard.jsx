@@ -27,6 +27,7 @@ const Dashboard = () => {
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
   const [vehicleFound, setVehicleFound] = useState(false);
   const [waitingForDriver, setWaitingForDriver] = useState(false);
+  const [VehicleType,setVehicleType]=useState(null)
   const [fare,setFare]=useState({});
 
   const handleChange = async (e) => {
