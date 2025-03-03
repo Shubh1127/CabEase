@@ -29,7 +29,6 @@ const Dashboard = () => {
   const [waitingForDriver, setWaitingForDriver] = useState(false);
   const [VehicleType,setVehicleType]=useState(null)
   const [fare,setFare]=useState({});
-
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setInfo({
@@ -135,7 +134,7 @@ const Dashboard = () => {
         Authorization:`bearer ${localStorage.getItem('token')}`
       }
     })
-    console.log(response.data);
+    // console.log(response.data);
     }catch(err){
       console.error(err);
     }
@@ -209,13 +208,13 @@ const Dashboard = () => {
           </div>
         </div>
         <div ref={VehiclePanelRef} className="fixed z-10 bottom-0 w-full bg-white translate-y-full px-3 py-10 pt-14">
-          <VehiclePanel  createRide={createRide} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
+          <VehiclePanel  selectVehicle={setVehicleType} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
         </div>
         <div ref={ConfirmRideRef} className="fixed z-10 bottom-0 w-full bg-white translate-y-full px-3 py-6 pt-12">
-          <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
+          <ConfirmRide vehicleType={VehicleType} createRide={createRide} pickup={info.pickup} destination={info.destination} fare={fare[VehicleType]}setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
         </div>
         <div ref={vehicleFoundRef} className="fixed z-10 bottom-0 w-full bg-white translate-y-full px-3 py-6 pt-12">
-          <LookingForDriver setVehicleFound={setVehicleFound} />
+          <LookingForDriver pickup={info.pickup} destination={info.destination} fare={fare[VehicleType]} setVehicleFound={setVehicleFound} />
         </div>
         <div ref={waitingForDriverRef} className="fixed z-10 bottom-0 w-full bg-white translate-y-full px-3 py-6 pt-12">
           <WaitingForDriver waitingForDriver={waitingForDriver} />
