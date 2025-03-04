@@ -4,6 +4,7 @@ import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signInWithEmai
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 const CaptainContext = createContext();
 
@@ -42,10 +43,30 @@ export const CaptainAuthProvider = ({ children }) => {
     const handleCaptainSignup = async (e) => {
         e.preventDefault();
         try {
+            const response=await axios.post('http://localhost:3000/captains/register',{
+                fullname:{
+                    firstname: captainData.firstname,
+                    lastname: captainData.lastname,
+                },
+                email: captainData.email,
+                password: captainData.password,
+                phoneNumber: captainData.phoneNumber,
+                vehicleInfo:{
+                    color: vehicleInfo.color,
+                    capacity: vehicleInfo.capacity,
+                    numberPlate: vehicleInfo.numberPlate,
+                    vehicleType: vehicleInfo.vehicleType,
+                }
+            })
+            const token=response.data.token;
+            const captainn=response.data.captain;
+            localStorage.setItem('captain', JSON.stringify(captainn));
+            localStorage.setItem('captainToken',token)
             const CaptainCredential = await createUserWithEmailAndPassword(auth, captainData.email, captainData.password);
             const captain = CaptainCredential.user;
             const captainToken=await captain.getIdToken();
             localStorage.setItem('captainToken',captainToken)
+            localStorage.setItem('captain', JSON.stringify(captainData));
             await sendEmailVerification(captain);
             const CaptainToken = await captain.getIdToken();
             localStorage.setItem('captainToken', CaptainToken);
@@ -202,6 +223,7 @@ export const CaptainAuthProvider = ({ children }) => {
             const captain = CaptainCredential.user;
             const captainToken=await captain.getIdToken();
             localStorage.setItem('captainToken',captainToken)
+            localStorage.setItem('captain', JSON.stringify(captainData));
             await captain.reload();
             if (captain.emailVerified) {
                 setIsVerified(true);

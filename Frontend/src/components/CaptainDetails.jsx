@@ -1,4 +1,8 @@
+import { useCaptainAuth } from "../context/CaptainContext";
 const CaptainDetails=()=>{
+  const {captainData}=useCaptainAuth();
+  console.log(captainData);
+
     return (
         <div >
             <div className="flex items-center justify-between">
