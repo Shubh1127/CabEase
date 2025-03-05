@@ -3,7 +3,6 @@ import { useCaptainAuth } from "../../context/CaptainContext";
 const LoginCaptain = () => {
   const{
     handleCaptainGoogleSignUp,
-    handleCaptainGithubSignUp,
     handleCaptainLogin,
     handleCaptainChange,
     captainData,
@@ -27,7 +26,6 @@ const LoginCaptain = () => {
       <div className="flex flex-col items-center gap-2">
         <p>OR</p>
         <button onClick={handleCaptainGoogleSignUp} className="border border-black rounded w-60 p-1 font-semibold"><i className="fa-brands fa-google mr-2 w-3"></i>Google</button>
-        <button onClick={handleCaptainGithubSignUp} className="border border-black rounded w-60 p-1 font-semibold"><i className="fa-brands fa-github mr-1 w-4"></i>Github</button>
       </div>
     </div>
   )

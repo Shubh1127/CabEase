@@ -9,7 +9,7 @@ module.exports.registerCaptain=async(req,res,next)=>{
         return res.status(400).json({erros:errors.array()})
     }
 
-    const {fullname,email,password,privateKey,vehicle}=req.body;
+    const {fullname,email,password,vehicle}=req.body;
 
     const isCaptainExist=await CaptainModel.findOne({email});
 
@@ -17,14 +17,12 @@ module.exports.registerCaptain=async(req,res,next)=>{
         return res.status(400).json({message:'catain already exist'})
     }
     const hashedPassword= await CaptainModel.hashPassword(password)
-    const hashedKey=await CaptainModel.hashKey(privateKey)
 
     const captain=await captainService.createCaptain({
             firstname:fullname.firstname,
             lastname:fullname.lastname,
             email,
             password:hashedPassword,
-            privateKey:hashedKey,
             color:vehicle.color,
             plate:vehicle.plate,
             capacity:vehicle.capacity,

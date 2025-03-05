@@ -3,7 +3,7 @@ import { useCaptainAuth } from '../../context/CaptainContext';
 import 'react-phone-input-2/lib/style.css';
 
 const SignupCaptain = () => {
-  const { handleCaptainChange, handleCaptainSignup, captainData, error,handleCaptainGoogleSignup,handleCaptainGithubSignUp,message,vehicleInfo,handleVechileChange } = useCaptainAuth();
+  const { handleCaptainChange, handleCaptainSignup, captainData, error,handleCaptainGoogleSignup,message,vehicleInfo,handleVechileChange } = useCaptainAuth();
   return (
     <div className='h-screen'>
       <h1 className="text-4xl mt-3 p-3 font-semibold">Uber</h1>
@@ -117,7 +117,6 @@ const SignupCaptain = () => {
         <Link to={'/captain-login'}><p className='text-blue-500 mt-1'>Already have an account? Login</p></Link>
         <p className='mb-3'>OR</p>
         <button className='border border-black rounded p-1 w-[60vw] ' onClick={handleCaptainGoogleSignup}><i className="fa-brands fa-google mr-1 w-4"></i>Google</button>
-        <button className='border border-black rounded p-1 w-[60vw] ' onClick={handleCaptainGithubSignUp}><i className="fa-brands fa-github mr-2 w-4"></i>Github</button>
       </div>
       {/* <div className='w-full'>
       <Link to='/signup' className='  bg-green-600 p-3 mx-auto rounded text-center text-white font-medium w-screen mt-12 mb-2'>Sign up as User</Link>

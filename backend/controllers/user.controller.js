@@ -9,7 +9,10 @@ module.exports.registerUser=async (req,res,next)=>{
     if(isUserExist){
         return res.status(400).json({message:'user already exist'})
     }
-    const hashedPassword= await userModel.hashPassword(password)
+    hashedPassword=undefined;
+    if(authProvider==='local' && password){
+        hashedPassword=await userModel.hashPassword(password);
+    }
     
     const user=await userService.createUser({
         firstname,
@@ -17,6 +20,7 @@ module.exports.registerUser=async (req,res,next)=>{
         email,
         password:hashedPassword,
         phoneNumber,
+        authProvider
     })
     
     const token=user.generateAuthToken();
@@ -34,10 +38,11 @@ module.exports.loginUser=async (req,res,next)=>{
     if(!user){
         return res.status(401).json({message:'User not found'});
     }
-    const isMatch=await user.comparePassword(password)
-
-    if(!isMatch){
-        return res.status(401).json({message:'Password incorrect'})
+    if(user.authProvider=='local'){
+        const isMatch=await user.comparePassword(password)
+        if(!isMatch){
+            return res.status(401).json({message:'Password incorrect'})
+        }
     }
     const token=user.generateAuthToken();
 

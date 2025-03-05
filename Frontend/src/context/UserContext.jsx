@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { auth, db } from '../../firebaseConfig';
-import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import PropTypes from 'prop-types';
@@ -19,7 +19,6 @@ export const UserProvider = ({ children }) => {
     const [message, setMessage] = useState('');
     const [data, setData] = useState({ firstname: '', lastname: '', email: '', password: '', phoneNumber: '' });
     const GoogleProvider = new GoogleAuthProvider();
-    const GithubProvider = new GithubAuthProvider();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -84,12 +83,23 @@ export const UserProvider = ({ children }) => {
             if (user) {
                 const idToken = await user.getIdToken();
                 localStorage.setItem('idToken', idToken);
+                const fullName = user.displayName || '';
+                const [firstname, lastname] = fullName.split(' ') || ['', ''];
+                const phoneNumber = user.phoneNumber || '';
                 await setDoc(doc(db, 'users', user.uid), {
-                    firstname: data.firstname,
-                    lastname: data.lastname,
+                    firstname,
+                    lastname,
                     email: user.email,
-                    phoneNumber: data.phoneNumber,
+                    phoneNumber
                 });
+
+                await axios.post('http://localhost:3000/users/register',{
+                    firstname,
+                    lastname,
+                    email:user.email,
+                    authProvider:'google',
+                    phoneNumber
+                })
                 navigate('/dashboard');
                 setUser(user);
                 setMessage('');
@@ -124,91 +134,24 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    const handleGithubSignUp = async () => {
-        try {
-            const result = await signInWithPopup(auth, GithubProvider);
-            const user = result.user;
-            if (user) {
-                const idToken = await user.getIdToken();
-                localStorage.setItem('idToken', idToken);
-                await setDoc(doc(db, 'users', user.uid), {
-                    firstname: data.firstname,
-                    lastname: data.lastname,
-                    email: user.email,
-                    phoneNumber: data.phoneNumber,
-                });
-                navigate('/dashboard');
-                setUser(user);
-            }
-        } catch (e) {
-            switch(e.code){
-                case 'auth/email-already-in-use':
-                    setError('Email already in use');
-                    break;
-                case 'auth/weak-password':
-                    setError('Password should be at least 6 characters');
-                    break;
-                case 'auth/invalid-email':
-                    setError('Invalid email');
-                    break;
-                case 'auth/operation-not-allowed':
-                    setError('Email verification is not allowed for this project');
-                    break;
-                case 'auth/argument-error':
-                    setError('Invalid argument');
-                    break;
-                case 'auth/too-many-requests':
-                    setError('Too many requests. Try again later');
-                    break;
-                case 'auth/network-request-failed':
-                    setError('Check your Network Conection');
-                    break;
-                default:
-                    setError('Something went wrong');
-                    }
-        }
-    };
+    
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             const response=await axios.post('http://localhost:3000/users/login',data)
-            const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-            const user = userCredential.user;
-            const idToken = await user.getIdToken();
+            
             const token=response.data.token;
             localStorage.setItem('token',token);
-            await user.reload();
-            localStorage.setItem('idToken', idToken);
             navigate('/dashboard');
             setMessage('');
             setError('');
-        } catch (e) {
-            switch(e.code){
-                case 'auth/user-not-found':
-                    setError('User not found');
-                    break;
-                case 'auth/wrong-password':
-                    setError('Wrong password');
-                    break;
-                case 'auth/invalid-email':
-                    setError('Invalid email');
-                    break;
-                case 'auth/operation-not-allowed':
-                    setError('Email verification is not allowed for this project');
-                    break;
-                case 'auth/argument-error':
-                    setError('Invalid argument');
-                    break;
-                case 'auth/too-many-requests':
-                    setError('Too many requests. Try again later');
-                    break;
-                case 'auth/network-request-failed':
-                    setError('Check your Network Conection');
-                    break;
-                default:
-                    setError('Something went wrong');
-                    }
+        } catch (error) {
+            if (error.response && error.response.data) {
+                setError(error.response.data.message); // Show backend error message
+            } else {
+                setError('Something went wrong');
+            }
         }
     };
 
@@ -262,7 +205,6 @@ export const UserProvider = ({ children }) => {
         <UserContext.Provider
             value={{
                 handleGoogleSignUp,
-                handleGithubSignUp,
                 handleChange,
                 handleLogin,
                 handleSubmit,

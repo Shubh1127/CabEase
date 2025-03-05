@@ -2,12 +2,15 @@ const userModel=require('../Models/user.Model')
 
 
 module.exports.createUser=async ({
-    firstname,lastname,email,password,phoneNumber
+    firstname,lastname,email,password,phoneNumber,authProvider = 'local'
 })=>{
-    if(! firstname || !email ||  !password){
-        throw new Error('All fields are required');
+    if(! firstname || !email ){
+        throw new Error('Firstname and email are required');
     }
-    const user=userModel.create({
+    if(authProvider=='local' && !password){
+        throw new Error('Password is required');
+    }
+    const user=await userModel.create({
         fullname:{
             firstname,
             lastname
@@ -15,6 +18,7 @@ module.exports.createUser=async ({
         email,
         password,
         phoneNumber,
+        authProvider
     })
 
     return user;

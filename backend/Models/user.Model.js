@@ -22,7 +22,9 @@ const UserSchema=new mongoose.Schema({
     },
     password:{
         type:String,
-        required:true,
+        required:function (){
+            return this.authProvider==='local';
+        },
         select:false,
     },
     phoneNumber:{
@@ -31,6 +33,11 @@ const UserSchema=new mongoose.Schema({
     },
     socketId:{
         type:String,
+    },
+    authProvider:{
+        type:String,
+        enum:['local','google','github'],
+        default:'local'
     }
 })
 

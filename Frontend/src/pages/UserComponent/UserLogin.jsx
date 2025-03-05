@@ -9,7 +9,6 @@ function UserLogin() {
     error,
     handleGoogleSignUp,
     handleLogin,
-    handleGithubSignUp,
     handleResetPassword,
   }=useUser();
   return (
@@ -63,13 +62,7 @@ function UserLogin() {
           >
           <i className="fa-brands fa-google mr-1"></i> Google
         </button>
-        <button
-          type="submit"
-          className="w-full  border border-black text-black p-2 mt-2 rounded font-semibold" 
-          onClick={handleGithubSignUp}
-          >
-          <i className="fa-brands fa-github mr-1 w-4"></i> Github
-        </button>
+        
             </div>
     </div>
   );

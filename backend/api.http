@@ -23,3 +23,21 @@ Content-Type:application/json
     "destination": "Mumbai"
   }
 }
+###
+POST http://localhost:3000/captains/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "fullname":{
+                    "firstname": "shubham",
+                    "lastname": "singh",
+                },
+                "email": "shubhamsinghmor2312@gmail.com",
+                "password": "Mummy1",
+                "vehicle":{
+                    "color": "white",
+                    "capacity": 4,
+                    "plate": "1546g",
+                    "vehicleType": "sedan",
+                }
+}
