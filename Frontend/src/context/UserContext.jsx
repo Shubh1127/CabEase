@@ -17,7 +17,7 @@ export const UserProvider = ({ children }) => {
     const [error, setError] = useState('');
     const [isVerified, setIsVerified] = useState(false);
     const [message, setMessage] = useState('');
-    const [data, setData] = useState({ firstname: '', lastname: '', email: '', password: '', phoneNumber: '' });
+    const [data, setData] = useState({ firstname: '', lastname: '', email: '', password: '', phoneNumber: '' ,authProvider:'local'});
     const GoogleProvider = new GoogleAuthProvider();
 
     const handleChange = (e) => {
@@ -85,7 +85,9 @@ export const UserProvider = ({ children }) => {
                 localStorage.setItem('idToken', idToken);
                 const fullName = user.displayName || '';
                 const [firstname, lastname] = fullName.split(' ') || ['', ''];
-                const phoneNumber = user.phoneNumber || '';
+                let phoneNumber = user.phoneNumber ||  prompt("Enter your phone number :") || '';
+                phoneNumber = phoneNumber && !isNaN(phoneNumber) ? Number(phoneNumber) : null;
+                console.log(fullName,phoneNumber);
                 await setDoc(doc(db, 'users', user.uid), {
                     firstname,
                     lastname,

@@ -4,29 +4,34 @@ const {validationResult}=require('express-validator')
 const blacklistTokenModel=require('../Models/blacklistToken.model')
 
 module.exports.registerUser=async (req,res,next)=>{
-    const {firstname,lastname,email,password,phoneNumber}=req.body;
-    const isUserExist=await userModel.findOne({email});
-    if(isUserExist){
-        return res.status(400).json({message:'user already exist'})
+    try{
+
+        const {firstname,lastname,email,password,phoneNumber,authProvider}=req.body;
+        const isUserExist=await userModel.findOne({email});
+        if(isUserExist){
+            return res.status(400).json({message:'user already exist'})
+        }
+        hashedPassword=undefined;
+        if(authProvider==='local' && password){
+            hashedPassword=await userModel.hashPassword(password);
+        }
+        
+        const user=await userService.createUser({
+            firstname,
+            lastname,
+            email,
+            password:hashedPassword,
+            phoneNumber,
+            authProvider
+        })
+        
+        const token=user.generateAuthToken();
+        res.cookie('token',token)
+        
+        res.status(200).json({token,user});
+    }catch(e){
+        console.error(e)
     }
-    hashedPassword=undefined;
-    if(authProvider==='local' && password){
-        hashedPassword=await userModel.hashPassword(password);
-    }
-    
-    const user=await userService.createUser({
-        firstname,
-        lastname,
-        email,
-        password:hashedPassword,
-        phoneNumber,
-        authProvider
-    })
-    
-    const token=user.generateAuthToken();
-    res.cookie('token',token)
-    
-    res.status(200).json({token,user});
     
 }
 
