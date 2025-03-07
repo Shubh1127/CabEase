@@ -17,7 +17,7 @@ const CaptainDetails=()=>{
         </div>
         <div className="flex p-3 mt-6 bg-gray-100 rounded-xl justify-center gap-5 items-start">
           <div className="text-center">
-            <i className="ri-timer-2-line text-3xl mb-2 font-thin"></i>
+            <i className="ri-timer-2-line text-2xl mb-2 font-thin"></i>
           <h5 className="text-lg font-medium">10.2</h5>
           <p className="text-sm text-gray-600">Hours Online</p>
           </div>
