@@ -41,6 +41,7 @@ export const CaptainAuthProvider = ({ children }) => {
 
     // Captain signup
     const handleCaptainSignup = async (e) => {
+        console.log(captainData.phoneNumber)
         e.preventDefault();
         try {
             const response=await axios.post('http://localhost:3000/captains/register',{
@@ -51,10 +52,10 @@ export const CaptainAuthProvider = ({ children }) => {
                 email: captainData.email,
                 password: captainData.password,
                 phoneNumber: captainData.phoneNumber,
-                vehicleInfo:{
+                vehicle:{
                     color: vehicleInfo.color,
                     capacity: vehicleInfo.capacity,
-                    numberPlate: vehicleInfo.numberPlate,
+                    plate: vehicleInfo.numberPlate,
                     vehicleType: vehicleInfo.vehicleType,
                 }
             })
@@ -77,10 +78,10 @@ export const CaptainAuthProvider = ({ children }) => {
                 },
                 email: captain.email,
                 phoneNumber: captainData.phoneNumber,
-                vehicleInfo:{
+                vehicle:{
                     color: vehicleInfo.color,
                     capacity: vehicleInfo.capacity,
-                    numberPlate: vehicleInfo.numberPlate,
+                    plate: vehicleInfo.numberPlate,
                     vehicleType: vehicleInfo.vehicleType,
                 }
             });
@@ -106,6 +107,7 @@ export const CaptainAuthProvider = ({ children }) => {
                     break;
                 default:
                     setError('Something went wrong');
+                    console.log(e);
             }
         }
     };
@@ -219,38 +221,19 @@ export const CaptainAuthProvider = ({ children }) => {
     const handleCaptainLogin = async (e) => {
         e.preventDefault();
         try {
-            const CaptainCredential = await signInWithEmailAndPassword(auth, captainData.email, captainData.password);
-            const captain = CaptainCredential.user;
-            const captainToken=await captain.getIdToken();
-            localStorage.setItem('captainToken',captainToken)
-            localStorage.setItem('captain', JSON.stringify(captainData));
-            await captain.reload();
-            if (captain.emailVerified) {
-                setIsVerified(true);
-                setError('');
-                navigate('/captain-home');
-            } else {
-                setIsVerified(false);
-                setError('Please verify your email before logging in.');
-                await signOut(auth);
-            }
-        } catch (e) {
-            switch(e.code){
-                case 'auth/invalid-email':
-                    setError('Invalid email');
-                    break;  
-                case 'auth/user-not-found':
-                    setError('User not found');
-                    break;
-                case 'auth/wrong-password':
-                    setError('Wrong password');
-                    break;
-                case 'auth/network-request-failed':
-                    setError('Check your Network ');
-                    break;
-                default:
-                    setError('Something went wrong');
-                    }
+           
+            const response=await axios.get('http://localhost:3000/captains/login',{
+                email:captainData.email,
+                password:captainData.password
+            })
+            const cap=response?.data?.captain;
+            const token=response?.data?.token;
+            localStorage.setItem('captainToken',token)
+            localStorage.setItem('captain', cap);
+           
+        } catch(e){
+            console.log(e);
+            setError(e.message);
         }
     };
 

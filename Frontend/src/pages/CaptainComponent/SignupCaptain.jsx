@@ -82,17 +82,6 @@ const SignupCaptain = () => {
           </div>
         <div className='flex'>
         <div className='flex flex-col'>
-        <label htmlFor="capacity" className="font-semibold ms-1">Capacity</label>
-        <input
-          className="border border-black rounded p-2 m-1 w-10/12"
-          type="number"
-          name="capacity"
-          value={vehicleInfo.capacity}
-          onChange={handleVechileChange}
-          required
-          />
-          </div>
-          <div className='flex flex-col '>
         <label htmlFor="lastname" className="font-semibold ms-1">Vehcile Type</label>
         <select
           className="border border-black rounded p-2 m-1 w-10/12  hover:cursor-pointer "
@@ -102,11 +91,25 @@ const SignupCaptain = () => {
           required
         >
           <option value="">Select Vehicle Type</option>
-          <option value="sedan">Sedan</option>
-          <option value="suv">SUV</option>
-          <option value="hatchback">Hatchback</option>
+          <option value="car">car</option>
+          <option value="moto">moto</option>
+          <option value="auto">auto</option>
         </select>
-        
+          </div>
+          <div className='flex flex-col ms-6 '>
+        <label htmlFor="capacity" className="font-semibold ms-1">Capacity</label>
+        <input
+          className="border border-black rounded p-2 m-1 w-10/12"
+          type="number"
+          name="capacity"
+          value={vehicleInfo.capacity}
+          min={1}
+          {...(vehicleInfo.vehicleType==='car' && {max:4})}
+          {...(vehicleInfo.vehicleType==='moto' && {max:1})}
+          {...(vehicleInfo.vehicleType==='auto' && {max:4})}
+          onChange={handleVechileChange}
+          required
+          />
           </div>
           </div>
         <button type="submit" className="bg-black text-white rounded p-1 mt-5">Submit</button>

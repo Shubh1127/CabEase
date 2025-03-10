@@ -26,11 +26,11 @@ let CaptainSchema=new mongoose.Schema({
         required:true,
         select:false,
     },
-    // privateKey:{
-    //     type:String,
-    //     required:true,
-    //     minlength:[4,'Private key must be at least 6 characters long']
-    // },
+    phoneNumber:{
+        type:Number,
+        required:true,
+        minlength:[10,'Number must be at least 10 numbers long']
+    },
     socketId:{
         type:String,
     },
@@ -58,7 +58,7 @@ let CaptainSchema=new mongoose.Schema({
         vehicleType:{
             type:String,
             required:true,
-            enum:['car','motorcycle','auto']
+            enum:['car','moto','auto']
         }
     },
     location:{

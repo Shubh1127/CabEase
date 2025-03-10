@@ -1,14 +1,16 @@
 import { useCaptainAuth } from "../context/CaptainContext";
 const CaptainDetails=()=>{
-  const {captainData}=useCaptainAuth();
-  console.log(captainData);
+  const captainData=JSON.parse(localStorage.getItem('captain'));
+  console.log(localStorage.getItem('captain'));
+  console.log(captainData)
+  console.log(captainData?.firstname);
 
     return (
         <div >
             <div className="flex items-center justify-between">
           <div className="flex items-center justify-start gap-3">
             <img className="h-11 w-10 rounded-full object-cover" src="https://imgs.search.brave.com/pT8MfOgQqK8pd47DbSeJWR4gL4UngfzugpxP3dOw1eQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA2Lzc4LzA5Lzc4/LzM2MF9GXzY3ODA5/Nzg3MV9HN09wb0hR/bWlaVGo0YkhCN1lX/MkhvSDFzeVdmQ2JC/OS5qcGc" />
-            <h4 className="text-lg font-medium">Harsh Patel</h4>
+            <h4 className="text-lg font-medium">{captainData?.firstname}</h4>
           </div>
           <div>
             <h4 className="text-xl font-semibold ">₹294.20</h4>

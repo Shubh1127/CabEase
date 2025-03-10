@@ -29,15 +29,16 @@ Content-Type: application/json
 
 {
   "fullname":{
-                    "firstname": "shubham",
-                    "lastname": "singh",
-                },
-                "email": "shubhamsinghmor2312@gmail.com",
-                "password": "Mummy1",
-                "vehicle":{
-                    "color": "white",
-                    "capacity": 4,
-                    "plate": "1546g",
-                    "vehicleType": "sedan",
-                }
+        "firstname":"shubDriver",
+        "lastname":"jaat"
+    },
+    "email":"test@gmail.com",
+    "phoneNumber":8708574656,
+    "password":"test1234",
+    "vehicle":{
+        "color":"red",
+        "plate":"Hr 14 T 1655",
+        "capacity":3,
+        "vehicleType":"car"
+    }
 }
