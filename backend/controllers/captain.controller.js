@@ -45,12 +45,12 @@ module.exports.loginCaptain=async (req,res,next)=>{
     const Captain=await CaptainModel.findOne({email}).select('+password');
 
     if(!Captain){
-        return res.status(401).json({message:'Captain not found'});
+        return res.status(400).json({message:'Captain not found'});
     }
     const isMatch=await Captain.comparePassword(password)
 
     if(!isMatch){
-        return res.status(401).json({message:'Password incorrect'})
+        return res.status(400).json({message:'Password incorrect'})
     }
     const token=Captain.generateAuthToken();
 

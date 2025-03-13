@@ -222,7 +222,7 @@ export const CaptainAuthProvider = ({ children }) => {
         e.preventDefault();
         try {
            
-            const response=await axios.get('http://localhost:3000/captains/login',{
+            const response=await axios.post('http://localhost:3000/captains/login',{
                 email:captainData.email,
                 password:captainData.password
             })
