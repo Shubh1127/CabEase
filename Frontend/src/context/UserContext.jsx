@@ -144,6 +144,8 @@ export const UserProvider = ({ children }) => {
             const response=await axios.post('http://localhost:3000/users/login',data)
             
             const token=response.data.token;
+            const user=response.data.user;
+            localStorage.setItem('user',JSON.stringify(user));
             localStorage.setItem('token',token);
             navigate('/dashboard');
             setMessage('');

@@ -89,3 +89,8 @@ module.exports.logoutCaptain=async (req,res,next)=>{
     res.clearCookie('token');
     res.status(200).json({message:'Logged out'})
 }
+
+// module.exports.ForgotPassword=async(req,res,next)=>{
+//     const {email,newPassword,confirmPassword}=req.body;
+//     const captain=await CaptainModel
+// }

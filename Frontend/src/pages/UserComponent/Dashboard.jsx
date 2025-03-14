@@ -8,7 +8,9 @@ import VehiclePanel from "../../components/VehiclePanel";
 import ConfirmRide from "../../components/ConfirmRide";
 import LookingForDriver from "../../components/LookingForDriver";
 import WaitingForDriver from "../../components/WaitingForDriver";
-
+import { useEffect } from "react";
+import { useContext } from "react";
+import { SocketContext } from "../../context/SocketContext";
 const Dashboard = () => {
   const [info, setInfo] = useState({
     pickup: "",
@@ -29,6 +31,11 @@ const Dashboard = () => {
   const [waitingForDriver, setWaitingForDriver] = useState(false);
   const [VehicleType,setVehicleType]=useState(null)
   const [fare,setFare]=useState({});
+  const {socket}=useContext(SocketContext);
+  const user=JSON.parse(localStorage.getItem('user'));  
+  useEffect(()=>{
+    socket.emit("join",{userType:"user" , userId:user?._id});
+  })
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setInfo({
