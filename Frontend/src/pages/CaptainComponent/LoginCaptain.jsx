@@ -21,7 +21,7 @@ const LoginCaptain = () => {
         <input className="p-2 border border-black rounded " type="password" name="password" placeholder="Enter your Password" value={captainData.password} onChange={handleCaptainChange} required></input>
         <p className="text-end text-blue-500 p-1" onClick={handleCaptainResetPassword}>Forgot Password?</p>
         <button className="border border-black text-white bg-black p-2 rounded" type="submit">Submit</button>
-        {error && <p className="text-green-400 p-1">{error}</p>}
+        {error && <p className="text-red-400 p-1">{error}</p>}
       </form>
       <div className="flex flex-col items-center gap-2">
         <p>OR</p>

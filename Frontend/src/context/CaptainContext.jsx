@@ -130,6 +130,7 @@ export const CaptainAuthProvider = ({ children }) => {
     // Captain signup using Google
     const handleCaptainGoogleSignup = async () => {
         try {
+            console.log('button was clicked')
             const result = await signInWithPopup(auth, GoogleProvider);
             const captain = result.user;
             if (captain) {
@@ -220,6 +221,10 @@ export const CaptainAuthProvider = ({ children }) => {
     // Captain login function
     const handleCaptainLogin = async (e) => {
         e.preventDefault();
+        if(!captainData.email || !captainData.password){
+            setError('Please fill all the fields');
+            return;
+        }
         try {
            
             const response=await axios.post('http://localhost:3000/captains/login',{
@@ -233,7 +238,7 @@ export const CaptainAuthProvider = ({ children }) => {
            
         } catch(e){
             console.log(e);
-            setError(e.message);
+            setError(e.response?.data?.message);
         }
     };
 

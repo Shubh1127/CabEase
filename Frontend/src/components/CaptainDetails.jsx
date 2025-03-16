@@ -1,10 +1,7 @@
-import { useCaptainAuth } from "../context/CaptainContext";
-import {socket} from '../context/SocketContext'
 const CaptainDetails=()=>{
   const captainData=JSON.parse(localStorage.getItem('captain'));
   console.log(captainData);
-  const {captain}=useCaptainAuth();
-  socket.emit('join',{captainId:captainData._id});
+  // socket.emit('join',{captainId:captainData._id});
     return (
         <div >
             <div className="flex items-center justify-between">
