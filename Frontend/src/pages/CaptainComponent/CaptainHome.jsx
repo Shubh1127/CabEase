@@ -5,14 +5,24 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import { useRef } from "react";
+import { useRef,useContext,useEffect } from "react";
+import { SocketContext } from "../../context/SocketContext";
 import ConfirmRidePopup from "../../components/ConfirmRidePopup";
 const CaptainHome = () => {
+  const {socket}=useContext(SocketContext);
   const [ridePopupPanel,setRidePopupPanel]=useState(true);
   const [ConfirmRidePopupPanel,setConfirmRidePopupPanel]=useState(false);
-  const { captain, handleCaptainLogout } = useCaptainAuth();
+  const { handleCaptainLogout } = useCaptainAuth();
   const ridePopupPanelRef=useRef(null);
   const ConfirmRidePopupPanelRef=useRef(null);
+  const captainData=JSON.parse(localStorage.getItem('captain'));
+useEffect(()=>{
+  socket.emit('join',{
+    userId:captainData?._id,
+    userType:'captain'
+  })
+})
+
   useGSAP(function(){
     gsap.to(ridePopupPanelRef.current,{
        transform:ridePopupPanel?'translateY(0)':'translateY(100%)',

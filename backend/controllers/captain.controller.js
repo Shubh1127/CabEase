@@ -36,27 +36,30 @@ module.exports.registerCaptain=async(req,res,next)=>{
     res.status(201).json({token,captain});
 }
 module.exports.loginCaptain=async (req,res,next)=>{
-    const errors=validationResult(req)
-    if(!errors.isEmpty()){
+    try{
+        const errors=validationResult(req)
+        if(!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()})
     }
     const {email,password}=req.body;
 
     const Captain=await CaptainModel.findOne({email}).select('+password');
-
-    if(!Captain){
+    if(!Captain){   
         return res.status(400).json({message:'Captain not found'});
     }
     const isMatch=await Captain.comparePassword(password)
-
     if(!isMatch){
         return res.status(400).json({message:'Password incorrect'})
     }
     const token=Captain.generateAuthToken();
 
     res.cookie('token',token)
-
-    res.status(200).json({token,Captain})
+    
+     res.status(200).json({token,Captain})
+}catch(err){
+    console.log(err)
+    return res.status(500).json({message:'Internal server error'})
+}
 }
 // module.exports.forgotPassword=async(req,res,next)=>{
 //     const {email,privateKey,newpassword,confirmpassword}=req.body;

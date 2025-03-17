@@ -231,11 +231,11 @@ export const CaptainAuthProvider = ({ children }) => {
                 email:captainData.email,
                 password:captainData.password
             })
-            const cap=response?.data?.captain;
+            const cap=response?.data?.Captain;
             const token=response?.data?.token;
             localStorage.setItem('captainToken',token)
-            localStorage.setItem('captain', cap);
-           
+            localStorage.setItem('captain', JSON.stringify(cap));
+            navigate('/captain-home');
         } catch(e){
             console.log(e);
             setError(e.response?.data?.message);
