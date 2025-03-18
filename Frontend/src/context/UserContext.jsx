@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+
 const UserContext = createContext();
 
 export const useUser = () => {
@@ -17,7 +18,7 @@ export const UserProvider = ({ children }) => {
     const [error, setError] = useState('');
     const [isVerified, setIsVerified] = useState(false);
     const [message, setMessage] = useState('');
-    const [data, setData] = useState({ firstname: '', lastname: '', email: '', password: '', phoneNumber: '' ,authProvider:'local'});
+    const [data, setData] = useState({ firstname: '', lastname: '', email: '', password: '', phoneNumber: '', authProvider: 'local' });
     const GoogleProvider = new GoogleAuthProvider();
 
     const handleChange = (e) => {
@@ -28,6 +29,40 @@ export const UserProvider = ({ children }) => {
         });
     };
 
+    const setTokenWithExpiry = (key, value, expiryInMinutes) => {
+        const now = new Date();
+        const item = {
+            value: value,
+            expiry: now.getTime() + expiryInMinutes * 60 * 1000,
+        };
+        localStorage.setItem(key, JSON.stringify(item));
+    };
+
+    const getTokenWithExpiry = (key) => {
+        const itemStr = localStorage.getItem(key);
+        if (!itemStr) {
+            return null;
+        }
+        const item = JSON.parse(itemStr);
+        const now = new Date();
+        if (now.getTime() > item.expiry) {
+            localStorage.removeItem(key);
+            return null;
+        }
+        return item.value;
+    };
+
+    const refreshToken = async () => {
+        try {
+            const response = await axios.post('http://localhost:3000/users/refresh-token', {}, { withCredentials: true });
+            const newAccessToken = response.data.accessToken;
+            setTokenWithExpiry('token', newAccessToken, 15); // Set new access token with 15 minutes expiry
+        } catch (error) {
+            console.error('Error refreshing token:', error);
+            handleLogout();
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -35,20 +70,23 @@ export const UserProvider = ({ children }) => {
             const user = userCredential.user;
             await sendEmailVerification(user);
             const idToken = await user.getIdToken();
-            localStorage.setItem('idToken', idToken);
+            setTokenWithExpiry('idToken', idToken, 48 * 60); // Set token with 48 hours expiry
             await setDoc(doc(db, 'users', user.uid), {
                 firstname: data.firstname,
                 lastname: data.lastname,
                 email: user.email,
                 phoneNumber: data.phoneNumber,
             });
-            await axios.post('http://localhost:3000/users/register',data)
-
+            const response = await axios.post('http://localhost:3000/users/register', data);
+            const accessToken = response?.data?.accessToken;
+            const userResponse = response?.data?.user;
+            setTokenWithExpiry('token', accessToken, 15); // Set access token with 15 minutes expiry
+            localStorage.setItem('user', JSON.stringify(userResponse));
             setMessage('Verification email is sent. Verify your email first.');
             startVerificationCheck(user);
         } catch (e) {
             setError(e.message);
-            switch(e.code){
+            switch (e.code) {
                 case 'auth/email-already-in-use':
                     setError('Email already in use');
                     break;
@@ -68,11 +106,11 @@ export const UserProvider = ({ children }) => {
                     setError('Too many requests. Try again later');
                     break;
                 case 'auth/network-request-failed':
-                    setError('Check your Network Conection');
+                    setError('Check your Network Connection');
                     break;
                 default:
                     setError('Something went wrong');
-                    }
+            }
         }
     };
 
@@ -82,12 +120,12 @@ export const UserProvider = ({ children }) => {
             const user = result.user;
             if (user) {
                 const idToken = await user.getIdToken();
-                localStorage.setItem('idToken', idToken);
+                setTokenWithExpiry('idToken', idToken, 48 * 60); // Set token with 48 hours expiry
                 const fullName = user.displayName || '';
                 const [firstname, lastname] = fullName.split(' ') || ['', ''];
-                let phoneNumber = user.phoneNumber ||  prompt("Enter your phone number :") || '';
+                let phoneNumber = user.phoneNumber || prompt("Enter your phone number:") || '';
                 phoneNumber = phoneNumber && !isNaN(phoneNumber) ? Number(phoneNumber) : null;
-                console.log(fullName,phoneNumber);
+                console.log(fullName, phoneNumber);
                 await setDoc(doc(db, 'users', user.uid), {
                     firstname,
                     lastname,
@@ -95,20 +133,25 @@ export const UserProvider = ({ children }) => {
                     phoneNumber
                 });
 
-                await axios.post('http://localhost:3000/users/register',{
+                const response = await axios.post('http://localhost:3000/users/register', {
                     firstname,
                     lastname,
-                    email:user.email,
-                    authProvider:'google',
+                    email: user.email,
+                    authProvider: 'google',
                     phoneNumber
-                })
+                });
+
+                const accessToken = response?.data?.accessToken;
+                const userResponse = response?.data?.user;
+                setTokenWithExpiry('token', accessToken, 15); 
+                localStorage.setItem('user', JSON.stringify(userResponse));
                 navigate('/dashboard');
                 setUser(user);
                 setMessage('');
                 setError('');
             }
         } catch (e) {
-            switch(e.code){
+            switch (e.code) {
                 case 'auth/email-already-in-use':
                     setError('Email already in use');
                     break;
@@ -128,25 +171,23 @@ export const UserProvider = ({ children }) => {
                     setError('Too many requests. Try again later');
                     break;
                 case 'auth/network-request-failed':
-                    setError('Check your Network Conection');
+                    setError('Check your Network Connection');
                     break;
                 default:
                     setError('Something went wrong');
-                    }
+            }
         }
     };
-
-    
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response=await axios.post('http://localhost:3000/users/login',data)
-            
-            const token=response.data.token;
-            const user=response.data.user;
-            localStorage.setItem('user',JSON.stringify(user));
-            localStorage.setItem('token',token);
+            const response = await axios.post('http://localhost:3000/users/login', data);
+
+            const token = response?.data?.accessToken;
+            const userResponse = response?.data?.user;
+            setTokenWithExpiry('token', token, 15); // Set access token with 15 minutes expiry
+            localStorage.setItem('user', JSON.stringify(userResponse));
             navigate('/dashboard');
             setMessage('');
             setError('');
@@ -164,6 +205,8 @@ export const UserProvider = ({ children }) => {
             await signOut(auth);
             setUser(null);
             localStorage.removeItem('idToken');
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
             navigate('/');
         } catch (e) {
             setError(e.message);
@@ -203,6 +246,16 @@ export const UserProvider = ({ children }) => {
             }
             return () => unsubscribe();
         });
+
+        const token = getTokenWithExpiry('token');
+        if (!token) {
+            refreshToken();
+        } else {
+            const intervalId = setInterval(() => {
+                refreshToken();
+            }, 14 * 60 * 1000); // Refresh token every 14 minutes
+            return () => clearInterval(intervalId);
+        }
     }, []);
 
     return (
