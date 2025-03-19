@@ -61,7 +61,6 @@ module.exports.loginUser = async (req, res, next) => {
     }
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
-    const token = user.generateAuthToken();
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
