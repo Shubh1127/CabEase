@@ -1,6 +1,8 @@
 const { Server } = require("socket.io");
-const userModel = require('./Models/user.Model');
-const captainModel = require('./Models/captain.model');
+const userModel = require("./Models/user.Model");
+const captainModel = require("./Models/captain.model");
+const UserModel = require("./Models/user.Model");
+const CaptainModel = require("./Models/captain.model");
 let io;
 
 const initializeSocket = (server) => {
@@ -14,14 +16,36 @@ const initializeSocket = (server) => {
   io.on("connection", (socket) => {
     console.log(`New client connected: ${socket.id}`);
 
-    socket.on('join', async (data) => {
+    socket.on("join", async (data) => {
       const { userId, userType } = data;
       console.log(`User ${userId} joined as ${userType}`);
-      if (userType === 'user') {
-        await userModel.findByIdAndUpdate(userId, { socketId: socket.id }, { new: true });
-      } else if (userType === 'captain') {
-        await captainModel.findByIdAndUpdate(userId, { socketId: socket.id }, { new: true });
+      if (userType === "user") {
+        await userModel.findByIdAndUpdate(
+          userId,
+          { socketId: socket.id },
+          { new: true }
+        );
+      } else if (userType === "captain") {
+        await captainModel.findByIdAndUpdate(
+          userId,
+          { socketId: socket.id },
+          { new: true }
+        );
       }
+    });
+
+    socket.on("update-location-captain", async (data) => {
+      const {userId,location} = data;
+      if(!location || !location.ltd || !location.lng){
+        return socket.emit('error',{message:"Invalid location data"});
+      }
+      console.log(`Captain ${userId} updated location: ${location}`);
+      const captain=await captainModel.findByIdAndUpdate(userId,{location:{
+        ltd:location.ltd,
+        lng:location.lng
+      }
+      },{new:true});
+     
     });
 
     socket.on("disconnect", () => {

@@ -43,7 +43,7 @@ module.exports.loginCaptain=async (req,res,next)=>{
     }
     const {email,password}=req.body;
 
-    const Captain=await CaptainModel.findOne({email}).select('+password');
+    const Captain=await CaptainModel.findOne({email}).select('+password')
     if(!Captain){   
         return res.status(400).json({message:'Captain not found'});
     }
