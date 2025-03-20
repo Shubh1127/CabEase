@@ -21,8 +21,24 @@ useEffect(()=>{
     userId:captainData?._id,
     userType:'captain'
   })
+  
+  const updateLocation=()=>{
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(position=>{
+        socket.emmit('update-location-captain',{
+          userId:captainData?._id,
+          location:{
+            ltd:position.coords.latitude,
+            lng:position.coords.longitude
+          }
+        })
+      })
+    }
+  }
+  // const locationInterval=setInterval(updateLocation,15000);
+  
+  // return()=>clearInterval(locationInterval);
 })
-
   useGSAP(function(){
     gsap.to(ridePopupPanelRef.current,{
        transform:ridePopupPanel?'translateY(0)':'translateY(100%)',
