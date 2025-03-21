@@ -60,7 +60,7 @@ useEffect(()=>{
         {/* {captain ?<button onClick={handleCaptainLogout}>Logout</button>:<Link to={'/captain-login'}>Login</Link>} */}
         <Link
           to={"/dashboard"}
-          className="fixed w-10 h-10 bg-white flex items-center justify-center rounded-full top-5 right-5 z-10"
+          className="fixed w-10 h-11 bg-white flex items-center justify-center rounded-full top-5 right-5 z-10"
         >
           <i className="ri-logout-box-r-line font-medium text-lg" onClick={handleCaptainLogout}></i>
         </Link>
