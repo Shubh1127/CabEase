@@ -13,5 +13,5 @@ router.get('/profile',authMiddleware.authUser,userController.getUserProfile)
 
 router.get('/logout',authMiddleware.authUser,userController.logoutUser)
 
-router.post('refresh-token',userController.refreshToken)
+router.post('/refresh-token',userController.refreshToken)
 module.exports=router;

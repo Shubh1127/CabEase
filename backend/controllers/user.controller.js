@@ -64,11 +64,11 @@ module.exports.loginUser = async (req, res, next) => {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "Strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
+    console.log("Set-Cookie Header:", res.getHeaders()["set-cookie"]);
     res.status(200).json({ accessToken, user });
   } catch (err) {
     console.error(err);
@@ -108,6 +108,7 @@ module.exports.logoutUser = async (req, res, next) => {
 module.exports.refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
+    
 
     if (!refreshToken) {
       return res.status(403).json({ message: "refresh token not found" });

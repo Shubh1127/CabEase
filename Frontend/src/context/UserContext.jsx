@@ -56,7 +56,7 @@ export const UserProvider = ({ children }) => {
         try {
             const response = await axios.post('http://localhost:3000/users/refresh-token', {}, { withCredentials: true });
             const newAccessToken = response.data.accessToken;
-            setTokenWithExpiry('token', newAccessToken, 15); // Set new access token with 15 minutes expiry
+            setTokenWithExpiry('token', newAccessToken, 15); 
         } catch (error) {
             console.error('Error refreshing token:', error);
             handleLogout();
@@ -188,6 +188,7 @@ export const UserProvider = ({ children }) => {
             const userResponse = response?.data?.user;
             setTokenWithExpiry('token', token, 15); // Set access token with 15 minutes expiry
             localStorage.setItem('user', JSON.stringify(userResponse));
+            setUser(userResponse);
             navigate('/dashboard');
             setMessage('');
             setError('');
@@ -199,6 +200,28 @@ export const UserProvider = ({ children }) => {
             }
         }
     };
+
+    const fetchUserProfile=async()=>{
+        try{
+            const token = getTokenWithExpiry('token');
+            console.log(token)
+            
+            const respone=await axios.get('http://localhost:3000/users/profile',{
+                credentials:'include',
+                headers:{
+                    Authorization:`Bearer ${getTokenWithExpiry('token')}`
+                }
+            })
+            return respone;
+        }catch(error){
+            console.error('Error fetching user profile:', error);
+            if (error.response && error.response.data) {
+                setError(error.response.data.message); // Show backend error message
+            } else {
+                setError('Something went wrong');
+            }
+        }
+    }
 
     const handleLogout = async () => {
         try {
@@ -236,6 +259,18 @@ export const UserProvider = ({ children }) => {
             setError(e.message);
         }
     };
+
+    useEffect(()=>{
+        const getuser=async()=>{
+            if(!user){
+                const res=await fetchUserProfile();
+                if(res){
+                    setUser(res.data.user);
+                }
+            }
+        }
+        getuser();
+    },[user])
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
