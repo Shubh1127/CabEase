@@ -38,7 +38,7 @@ const CaptainRiding = () => {
         alt=""
       />
     </div>
-    <div className="h-1/5 p-7 flex items-center justify-between relative bg-yellow-400" onClick={()=>setFinishRidePanel(true)}>
+    <div className="h-1/5 p-6 flex items-center justify-between relative bg-yellow-400" onClick={()=>setFinishRidePanel(true)}>
     <h5
         className="p-1 w-[85%] text-center  absolute top-0 "
               
