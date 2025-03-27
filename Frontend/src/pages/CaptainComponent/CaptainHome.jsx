@@ -25,7 +25,8 @@ useEffect(()=>{
   const updateLocation=()=>{
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(position=>{
-        socket.emmit('update-location-captain',{
+        
+        socket.emit('update-location-captain',{
           userId:captainData?._id,
           location:{
             ltd:position.coords.latitude,
@@ -35,9 +36,10 @@ useEffect(()=>{
       })
     }
   }
-  // const locationInterval=setInterval(updateLocation,15000);
+  const locationInterval=setInterval(updateLocation,15000);
+  updateLocation();
   
-  // return()=>clearInterval(locationInterval);
+  return()=>clearInterval(locationInterval);
 })
   useGSAP(function(){
     gsap.to(ridePopupPanelRef.current,{
@@ -60,7 +62,7 @@ useEffect(()=>{
         {/* {captain ?<button onClick={handleCaptainLogout}>Logout</button>:<Link to={'/captain-login'}>Login</Link>} */}
         <Link
           to={"/dashboard"}
-          className="fixed w-10 h-11 bg-white flex items-center justify-center rounded-full top-5 right-5 z-10"
+          className="fixed w-11 h-11 bg-white flex items-center justify-center rounded-full top-5 right-5 z-10"
         >
           <i className="ri-logout-box-r-line font-medium text-lg" onClick={handleCaptainLogout}></i>
         </Link>
