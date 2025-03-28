@@ -16,7 +16,7 @@ const UserSchema=new mongoose.Schema({
     },
     email:{
         type:String,
-        reqiured:true,
+        required:true,
         unique:true,
         minlength:[5,'Email must bt at least 5 characters long']
     },
@@ -28,7 +28,7 @@ const UserSchema=new mongoose.Schema({
         select:false,
     },
     phoneNumber:{
-        type:Number,
+        type:String,
         minlength:[10,'Phone number must be at least 10 characters long']
     },
     socketId:{

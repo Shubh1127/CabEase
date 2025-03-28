@@ -64,6 +64,7 @@ export const UserProvider = ({ children }) => {
     };
 
     const handleSubmit = async (e) => {
+        console.log(data.phoneNumber)
         e.preventDefault();
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
@@ -204,7 +205,6 @@ export const UserProvider = ({ children }) => {
     const fetchUserProfile=async()=>{
         try{
             const token = getTokenWithExpiry('token');
-            console.log(token)
             
             const respone=await axios.get('http://localhost:3000/users/profile',{
                 credentials:'include',

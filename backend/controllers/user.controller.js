@@ -8,9 +8,12 @@ const {
 } = require("../utils/auth.utils");
 const jwt = require("jsonwebtoken");
 module.exports.registerUser = async (req, res, next) => {
+  console.log(req.body)
   try {
     const { firstname, lastname, email, password, phoneNumber, authProvider } =
       req.body;
+
+    
     const isUserExist = await userModel.findOne({ email });
     if (isUserExist) {
       return res.status(400).json({ message: "user already exist" });
