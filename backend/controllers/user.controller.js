@@ -71,7 +71,7 @@ module.exports.loginUser = async (req, res, next) => {
       sameSite: "Strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    console.log("Set-Cookie Header:", res.getHeaders()["set-cookie"]);
+    // console.log("Set-Cookie Header:", res.getHeaders()["set-cookie"]);
     res.status(200).json({ accessToken, user });
   } catch (err) {
     console.error(err);

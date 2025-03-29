@@ -2,16 +2,19 @@ const CaptainModel=require("../Models/captain.model")
 const captainService=require("../services/captain.services")
 const {validationResult}=require('express-validator')
 const blacklistTokenModel=require('../Models/blacklistToken.model')
+const { generateAccessToken, generateRefreshToken } = require("../utils/auth.utils")
 
 module.exports.registerCaptain=async(req,res,next)=>{
-    const errors=validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(400).json({erros:errors.array()})
-    }
+    try{
 
-    const {fullname,email,password,phoneNumber,vehicle}=req.body;
+        const errors=validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({erros:errors.array()})
+        }
+        
+        const {fullname,email,password,phoneNumber,vehicle}=req.body;
 
-    const isCaptainExist=await CaptainModel.findOne({email});
+        const isCaptainExist=await CaptainModel.findOne({email});
 
     if(isCaptainExist){
         return res.status(400).json({message:'catain already exist'})
@@ -20,20 +23,28 @@ module.exports.registerCaptain=async(req,res,next)=>{
   
 
     const captain=await captainService.createCaptain({
-            firstname:fullname.firstname,
-            lastname:fullname.lastname,
-            email,
-            password:hashedPassword,
-            phoneNumber,
-            color:vehicle.color,
-            plate:vehicle.plate,
-            capacity:vehicle.capacity,
-            vehicleType:vehicle.vehicleType,
+        firstname:fullname.firstname,
+        lastname:fullname.lastname,
+        email,
+        password:hashedPassword,
+        phoneNumber,
+        color:vehicle.color,
+        plate:vehicle.plate,
+        capacity:vehicle.capacity,
+        vehicleType:vehicle.vehicleType,
         })
-        
-        const token=captain.generateAuthToken();
-    
-    res.status(201).json({token,captain});
+        const accessToken=generateAccessToken(captain)
+        const refreshToken=generateRefreshToken(captain)
+        res.cookie('refreshToken',refreshToken,{
+            httpOnly:true,
+            secure:true,
+            sameSite:"Strict",
+            maxAge:7*24*60*60*1000
+        })
+    res.status(201).json({accessToken,captain});
+    }catch(e){
+        return res.status(500).json({message:e})
+    }
 }
 module.exports.loginCaptain=async (req,res,next)=>{
     try{
@@ -51,11 +62,18 @@ module.exports.loginCaptain=async (req,res,next)=>{
     if(!isMatch){
         return res.status(400).json({message:'Password incorrect'})
     }
-    const token=Captain.generateAuthToken();
 
-    res.cookie('token',token)
+    const accessToken=generateAccessToken(Captain)
+    const refreshToken=generateRefreshToken(Captain)
+
+    res.cookie('refreshToken',refreshToken,{
+        httpOnly:true,
+        secure:false,
+        sameSite:"Strict",
+        maxAge:7*24*60*60*1000
+    })
     
-     res.status(200).json({token,Captain})
+     res.status(200).json({accessToken,Captain})
 }catch(err){
     console.log(err)
     return res.status(500).json({message:'Internal server error'})

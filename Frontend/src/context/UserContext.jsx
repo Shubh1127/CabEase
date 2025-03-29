@@ -204,7 +204,6 @@ export const UserProvider = ({ children }) => {
 
     const fetchUserProfile=async()=>{
         try{
-            const token = getTokenWithExpiry('token');
             
             const respone=await axios.get('http://localhost:3000/users/profile',{
                 credentials:'include',

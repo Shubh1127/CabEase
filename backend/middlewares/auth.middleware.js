@@ -19,7 +19,7 @@ module.exports.authUser = async (req, res, next) => {
     try {
         // Verify the accessToken or refreshToken
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
-        const user = await userModel.findById(decoded._id).select("+password");
+        const user = await userModel.findById(decoded.id).select("+password");
 
         if (!user) {
             return res.status(401).json({ message: "User not found" });
