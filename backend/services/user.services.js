@@ -10,6 +10,7 @@ module.exports.createUser=async ({
     if(authProvider=='local' && !password){
         throw new Error('Password is required');
     }
+    console.log(phoneNumber)
     const user=await userModel.create({
         fullname:{
             firstname,
@@ -17,7 +18,7 @@ module.exports.createUser=async ({
         },
         email,
         password,
-        phoneNumber,
+        Mobile:phoneNumber,
         authProvider
     })
 

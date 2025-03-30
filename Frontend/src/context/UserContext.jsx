@@ -183,7 +183,9 @@ export const UserProvider = ({ children }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/users/login', data);
+            const response = await axios.post('http://localhost:3000/users/login', data,{
+                withCredentials:true,
+            });
 
             const token = response?.data?.accessToken;
             const userResponse = response?.data?.user;
@@ -204,9 +206,9 @@ export const UserProvider = ({ children }) => {
 
     const fetchUserProfile=async()=>{
         try{
-            
+            // console.log(getTokenWithExpiry('token'));
             const respone=await axios.get('http://localhost:3000/users/profile',{
-                credentials:'include',
+                withCredentials:true,
                 headers:{
                     Authorization:`Bearer ${getTokenWithExpiry('token')}`
                 }
@@ -264,7 +266,7 @@ export const UserProvider = ({ children }) => {
             if(!user){
                 const res=await fetchUserProfile();
                 if(res){
-                    setUser(res.data.user);
+                    setUser(res.data);
                 }
             }
         }

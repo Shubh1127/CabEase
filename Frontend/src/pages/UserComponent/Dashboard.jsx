@@ -10,12 +10,14 @@ import LookingForDriver from "../../components/LookingForDriver";
 import WaitingForDriver from "../../components/WaitingForDriver";
 import { useEffect } from "react";
 import { useContext } from "react";
+import { useUser } from "../../context/UserContext";
 import { SocketContext } from "../../context/SocketContext";
 const Dashboard = () => {
   const [info, setInfo] = useState({
     pickup: "",
     destination: "",
   });
+  const {user}=useUser();
   const [panelOpen, setPanelOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const panelRef = useRef(null);
@@ -29,10 +31,11 @@ const Dashboard = () => {
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
   const [vehicleFound, setVehicleFound] = useState(false);
   const [waitingForDriver, setWaitingForDriver] = useState(false);
+  
   const [VehicleType,setVehicleType]=useState(null)
   const [fare,setFare]=useState({});
   const {socket}=useContext(SocketContext);
-  const user=JSON.parse(localStorage.getItem('user'));  
+  console.log(user?._id);
   useEffect(()=>{
     socket.emit("join",{userType:"user" , userId:user?._id});
   })

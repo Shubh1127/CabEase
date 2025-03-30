@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { Server } = require("socket.io");
 const userModel = require("./Models/user.Model");
 const captainModel = require("./Models/captain.model");

@@ -13,7 +13,10 @@ module.exports.registerUser = async (req, res, next) => {
     const { firstname, lastname, email, password, phoneNumber, authProvider } =
       req.body;
 
-    
+      if (!phoneNumber) {
+        return res.status(400).json({ message: "Phone number is required" });
+      }
+      
     const isUserExist = await userModel.findOne({ email });
     if (isUserExist) {
       return res.status(400).json({ message: "user already exist" });
@@ -28,15 +31,15 @@ module.exports.registerUser = async (req, res, next) => {
       lastname,
       email,
       password: hashedPassword,
-      phoneNumber,
+      phoneNumber:String(phoneNumber),
       authProvider,
     });
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
+      secure: false,
+      sameSite: "Lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -102,7 +105,7 @@ module.exports.getUserProfile = async (req, res, next) => {
 };
 
 module.exports.logoutUser = async (req, res, next) => {
-  const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+  const token = req.cookies.refreshToken || req.headers.authorization.split(" ")[1];
   await blacklistTokenModel.create({ token });
   res.clearCookie("token");
   res.status(200).json({ message: "Logged out" });
@@ -111,12 +114,9 @@ module.exports.logoutUser = async (req, res, next) => {
 module.exports.refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    
-
     if (!refreshToken) {
       return res.status(403).json({ message: "refresh token not found" });
     }
-
     jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,

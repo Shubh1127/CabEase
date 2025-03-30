@@ -27,9 +27,11 @@ const UserSchema=new mongoose.Schema({
         },
         select:false,
     },
-    phoneNumber:{
+    Mobile:{
         type:String,
-        minlength:[10,'Phone number must be at least 10 characters long']
+        minlength:[10,'Phone number must be at least 10 characters long'],
+        unique:true,
+        sparse:true,
     },
     socketId:{
         type:String,
