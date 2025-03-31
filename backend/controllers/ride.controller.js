@@ -11,7 +11,7 @@ module.exports.createRide=async(req,res)=>{
         const ride=await rideService.createRide({userId:req.user._id,pickup,destination,vehicleType});
              res.status(201).json({ride})
             const pickupCorrdinates=await mapsService.getAddressCoordinates(pickup);
-            const captainsInRadius=await mapsService.getCaptainsInRadius()
+            // const captainsInRadius=await mapsService.getCaptainsInRadius()
 
     }catch(err){
         console.error(err);

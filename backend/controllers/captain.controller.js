@@ -35,7 +35,7 @@ module.exports.registerCaptain=async(req,res,next)=>{
         })
         const accessToken=generateAccessToken(captain)
         const refreshToken=generateRefreshToken(captain)
-        res.cookie('refreshToken',refreshToken,{
+        res.cookie('refreshTokenCaptain',refreshToken,{
             httpOnly:true,
             secure:true,
             sameSite:"Strict",
@@ -66,7 +66,7 @@ module.exports.loginCaptain=async (req,res,next)=>{
     const accessToken=generateAccessToken(Captain)
     const refreshToken=generateRefreshToken(Captain)
 
-    res.cookie('refreshToken',refreshToken,{
+    res.cookie('refreshTokenCaptain',refreshToken,{
         httpOnly:true,
         secure:false,
         sameSite:"Strict",
@@ -115,3 +115,30 @@ module.exports.logoutCaptain=async (req,res,next)=>{
 //     const {email,newPassword,confirmPassword}=req.body;
 //     const captain=await CaptainModel
 // }
+
+module.exports.refreshToken=async(req,res)=>{
+    try{
+        const refreshToken=req.cookies.refreshTokenCaptain;
+        if(!refreshToken){
+            return res.status(403).json({message:'refresh token not found'})
+        }
+        jwt.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET,
+            async(err,decoded)=>{
+                if(err){
+                    return res.status(403).json({message:'Invalid refresh token'})
+                }
+                const captain=await CaptainModel.findById(decoded.id);
+                if(!captain){
+                    return res.status(403).json({message:'Captain not found'})  
+                }
+                const newAccessToken=generateAccessToken(captain)
+                res.status(200).json({accessToken:newAccessToken})
+            }
+        )
+    }catch(err){
+        console.log(err)
+        return res.status(500).json({message:'Internal server error'})
+    }
+}

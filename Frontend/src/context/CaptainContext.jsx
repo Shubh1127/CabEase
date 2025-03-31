@@ -39,6 +39,40 @@ export const CaptainAuthProvider = ({ children }) => {
         });
     };
 
+    const setTokenWithExpiry = (key, value, expiryInMinutes) => {
+        const now = new Date();
+        const item = {
+            value: value,
+            expiry: now.getTime() + expiryInMinutes * 60 * 1000,
+        };
+        localStorage.setItem(key, JSON.stringify(item));
+    };
+    const getTokenWithExpiry = (key) => {
+        const itemStr = localStorage.getItem(key);
+        if (!itemStr) {
+            return null;
+        }
+        const item = JSON.parse(itemStr);
+        const now = new Date();
+        if (now.getTime() > item.expiry) {
+            localStorage.removeItem(key);
+            return null;
+        }
+        return item.value;
+    };
+
+    const refershToken=async()=>{
+        try{
+            const response=await axios.post('http://localhost:3000/captains/refresh-token',{},{
+                withCredentials:true,
+            })
+            const newAccessToken=response.data.accessToken;
+            setTokenWithExpiry('captainToken',newAccessToken, 15);
+        }catch(err){
+            console.log(err);
+        }
+    }
+
     // Captain signup
     const handleCaptainSignup = async (e) => {
         console.log(captainData.phoneNumber)
@@ -59,18 +93,12 @@ export const CaptainAuthProvider = ({ children }) => {
                     vehicleType: vehicleInfo.vehicleType,
                 }
             })
-            const token=response.data.token;
-            const captainn=response.data.captain;
-            localStorage.setItem('captain', JSON.stringify(captainn));
-            localStorage.setItem('captainToken',token)
+            const captainToken=response?.data?.accessToken;
+            setCaptain(response?.data?.captain);
+            setTokenWithExpiry('captainToken',captainToken, 15);
             const CaptainCredential = await createUserWithEmailAndPassword(auth, captainData.email, captainData.password);
             const captain = CaptainCredential.user;
-            const captainToken=await captain.getIdToken();
-            localStorage.setItem('captainToken',captainToken)
-            localStorage.setItem('captain', JSON.stringify(captainData));
             await sendEmailVerification(captain);
-            const CaptainToken = await captain.getIdToken();
-            localStorage.setItem('captainToken', CaptainToken);
             await setDoc(doc(db, 'captains', captain.uid), {
                 fullname:{
                     firstname: captainData.firstname,
@@ -85,7 +113,6 @@ export const CaptainAuthProvider = ({ children }) => {
                     vehicleType: vehicleInfo.vehicleType,
                 }
             });
-            setCaptain(captain);
             setMessage('Email has been sent. Verify your email.');
             startVerificationCheck(captain);
         } catch (e) {
@@ -134,7 +161,8 @@ export const CaptainAuthProvider = ({ children }) => {
             const result = await signInWithPopup(auth, GoogleProvider);
             const captain = result.user;
             if (captain) {
-                localStorage.setItem('captainToken',await captain.getIdToken())
+                const captainIdToken=await captain.getIdToken();
+                setTokenWithExpiry('idToken',captainIdToken,48*60)
                 await setDoc(doc(db, 'captains', captain.uid), {
                     firstname: captainData.firstname,
                     lastname: captainData.lastname,
@@ -147,6 +175,23 @@ export const CaptainAuthProvider = ({ children }) => {
                         vehicleType: vehicleInfo.vehicleType,
                     }
                 });
+                const response=await axios.post('http:localhost:3000/captains/register',{
+                    fullname:{
+                        firstname: captainData.firstname,
+                        lastname: captainData.lastname,
+                    },
+                    email: captain.email,
+                    phoneNumber: captainData.phoneNumber,
+                    vehicle:{
+                        color: vehicleInfo.color,
+                        capacity: vehicleInfo.capacity,
+                        plate: vehicleInfo.numberPlate,
+                        vehicleType: vehicleInfo.vehicleType,
+                    }
+                })
+                const captainToken=response?.data?.accessToken;
+                setTokenWithExpiry('captainToken',captainToken, 15);
+                setCaptain(response?.data?.captain);
                 navigate('/captain-home');
                 setCaptain(captain);
             }
@@ -232,9 +277,9 @@ export const CaptainAuthProvider = ({ children }) => {
                 password:captainData.password
             })
             const cap=response?.data?.Captain;
-            const token=response?.data?.token;
-            localStorage.setItem('captainToken',token)
-            localStorage.setItem('captain', JSON.stringify(cap));
+            const token=response?.data?.accessToken;
+            setTokenWithExpiry('captainToken',token, 15);
+            setCaptain(cap);
             navigate('/captain-home');
         } catch(e){
             console.log(e);
@@ -255,6 +300,25 @@ export const CaptainAuthProvider = ({ children }) => {
         }
     };
 
+    const fetchCaptainProfile=async()=>{
+        try{
+
+            const response=await axios.get('http:localhost:3000/captains/profile',{
+                withCredentials:true,
+                headers:{
+                    Authorization:`Bearer ${getTokenWithExpiry('captainToken')}`
+                }
+            })
+            return response;
+        }catch(err){
+            console.log(err);
+            if (error.response && error.response.data) {
+                setError(error.response.data.message); // Show backend error message
+            } else {
+                setError('Something went wrong');
+            }
+        }
+    }
     // Captain reset password function
     const handleCaptainResetPassword = async () => {
         try {
@@ -264,6 +328,20 @@ export const CaptainAuthProvider = ({ children }) => {
             setError(e.message);
         }
     };
+
+    useEffect(()=>{
+        const initializer=async()=>{
+            await refershToken();
+            const token=getTokenWithExpiry('captainToken');
+            if(token){
+                const response=await fetchCaptainProfile();
+                if(response){
+                    setCaptain(response.data);
+                }
+        }
+    }
+    initializer();
+},[])
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((captain) => {

@@ -37,7 +37,9 @@ const Dashboard = () => {
   const {socket}=useContext(SocketContext);
   console.log(user?._id);
   useEffect(()=>{
-    socket.emit("join",{userType:"user" , userId:user?._id});
+    if(user){
+      socket.emit("join",{userType:"user" , userId:user?._id});
+    }
   })
   const handleChange = async (e) => {
     const { name, value } = e.target;

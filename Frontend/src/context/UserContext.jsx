@@ -18,6 +18,7 @@ export const UserProvider = ({ children }) => {
     const [error, setError] = useState('');
     const [isVerified, setIsVerified] = useState(false);
     const [message, setMessage] = useState('');
+    const [isRefreshing, setIsRefreshing] = useState(true);
     const [data, setData] = useState({ firstname: '', lastname: '', email: '', password: '', phoneNumber: '', authProvider: 'local' });
     const GoogleProvider = new GoogleAuthProvider();
 
@@ -60,6 +61,8 @@ export const UserProvider = ({ children }) => {
         } catch (error) {
             console.error('Error refreshing token:', error);
             handleLogout();
+        }finally{
+            setIsRefreshing(false);
         }
     };
 
@@ -261,17 +264,20 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    useEffect(()=>{
-        const getuser=async()=>{
-            if(!user){
-                const res=await fetchUserProfile();
-                if(res){
+    useEffect(() => {
+        const initializeUser = async () => {
+            await refreshToken(); // Run refreshToken first
+            const token = getTokenWithExpiry('token');
+            if (token) {
+                const res = await fetchUserProfile(); // Fetch user profile after refreshToken
+                if (res) {
                     setUser(res.data);
                 }
             }
-        }
-        getuser();
-    },[user])
+        };
+
+        initializeUser();
+    }, []);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
