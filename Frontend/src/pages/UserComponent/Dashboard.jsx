@@ -171,7 +171,7 @@ const Dashboard = () => {
             <h5 ref={panelCloseRef} className="text-right text-xl cursor-pointer">
               <i className="ri-arrow-down-wide-line" onClick={() => setPanelOpen(false)}></i>
             </h5>
-            <h4 className="text-3xl font-semibold">Find a Trip</h4>
+            <h4 className="text-4xl font-semibold">Find a Trip</h4>
             <form
               onSubmit={(e) => {
                 submitHandler(e);
