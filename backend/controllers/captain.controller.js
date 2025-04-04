@@ -64,7 +64,7 @@ module.exports.loginCaptain=async (req,res,next)=>{
     }
 
     const accessToken=generateAccessToken(Captain)
-    const refreshToken=generateRefreshToken(Captain)
+    const refreshToken=generateRefres hToken(Captain)
 
     res.cookie('refreshTokenCaptain',refreshToken,{
         httpOnly:true,
@@ -72,6 +72,7 @@ module.exports.loginCaptain=async (req,res,next)=>{
         sameSite:"Strict",
         maxAge:7*24*60*60*1000
     })
+        console.log("captainToken is saved",req.cookies.refreshTokenCaptain)
     
      res.status(200).json({accessToken,Captain})
 }catch(err){

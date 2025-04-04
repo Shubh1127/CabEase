@@ -27,5 +27,7 @@ router.post('/login',[
 // ],captainController.forgotPassword)
 router.get('/profile',authMiddleware.authCaptain,captainController.getCaptainProfile)
 
+router.post('/refresh-token',captainController.refreshToken)
+
 router.get('/logout',authMiddleware.authCaptain,captainController.logoutCaptain)
 module.exports=router
