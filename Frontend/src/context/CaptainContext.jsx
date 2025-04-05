@@ -275,6 +275,8 @@ export const CaptainAuthProvider = ({ children }) => {
             const response=await axios.post('http://localhost:3000/captains/login',{
                 email:captainData.email,
                 password:captainData.password
+            },{
+                withCredentials:true,
             })
             const cap=response?.data?.Captain;
             const token=response?.data?.accessToken;

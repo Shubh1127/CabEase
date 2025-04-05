@@ -6,22 +6,16 @@ const { generateAccessToken, generateRefreshToken } = require("../utils/auth.uti
 
 module.exports.registerCaptain=async(req,res,next)=>{
     try{
-
         const errors=validationResult(req);
         if(!errors.isEmpty()){
             return res.status(400).json({erros:errors.array()})
         }
-        
         const {fullname,email,password,phoneNumber,vehicle}=req.body;
-
         const isCaptainExist=await CaptainModel.findOne({email});
-
     if(isCaptainExist){
         return res.status(400).json({message:'catain already exist'})
     }
     const hashedPassword= await CaptainModel.hashPassword(password)
-  
-
     const captain=await captainService.createCaptain({
         firstname:fullname.firstname,
         lastname:fullname.lastname,
@@ -53,7 +47,6 @@ module.exports.loginCaptain=async (req,res,next)=>{
         return res.status(400).json({errors:errors.array()})
     }
     const {email,password}=req.body;
-
     const Captain=await CaptainModel.findOne({email}).select('+password')
     if(!Captain){   
         return res.status(400).json({message:'Captain not found'});
@@ -62,18 +55,14 @@ module.exports.loginCaptain=async (req,res,next)=>{
     if(!isMatch){
         return res.status(400).json({message:'Password incorrect'})
     }
-
     const accessToken=generateAccessToken(Captain)
-    const refreshToken=generateRefres hToken(Captain)
-
+    const refreshToken=generateRefreshToken(Captain)
     res.cookie('refreshTokenCaptain',refreshToken,{
         httpOnly:true,
         secure:false,
-        sameSite:"Strict",
+        sameSite:"Lax",
         maxAge:7*24*60*60*1000
     })
-        console.log("captainToken is saved",req.cookies.refreshTokenCaptain)
-    
      res.status(200).json({accessToken,Captain})
 }catch(err){
     console.log(err)
@@ -101,9 +90,6 @@ module.exports.getCaptainProfile=async(req,res,next)=>{
     return res.status(200).json({captain:req.captain})
 
 }
-
-
-
 module.exports.logoutCaptain=async (req,res,next)=>{
     
     const token=req.cookies.token || req.headers.authorization.split(' ')[ 1 ];
