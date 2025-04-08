@@ -15,19 +15,21 @@ const CaptainHome = () => {
   const { handleCaptainLogout } = useCaptainAuth();
   const ridePopupPanelRef=useRef(null);
   const ConfirmRidePopupPanelRef=useRef(null);
-  const captainData=JSON.parse(localStorage.getItem('captain'));
+  const captain=JSON.parse(localStorage.getItem('captain'));
 useEffect(()=>{
-  socket.emit('join',{
-    userId:captainData?._id,
-    userType:'captain'
-  })
+  if(captain){
+    socket.emit('join',{
+      userId:captain?._id,
+      userType:'captain'
+    })
+    }
   
   const updateLocation=()=>{
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(position=>{
         
         socket.emit('update-location-captain',{
-          userId:captainData?._id,
+          userId:captain?._id,
           location:{
             ltd:position.coords.latitude,
             lng:position.coords.longitude

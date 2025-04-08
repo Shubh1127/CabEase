@@ -60,7 +60,6 @@ export const UserProvider = ({ children }) => {
             setTokenWithExpiry('token', newAccessToken, 15); 
         } catch (error) {
             console.error('Error refreshing token:', error);
-            handleLogout();
         }finally{
             setIsRefreshing(false);
         }
@@ -313,6 +312,7 @@ export const UserProvider = ({ children }) => {
                 data,
                 user,
                 error,
+                setError,
                 isVerified,
             }}
         >

@@ -8,7 +8,6 @@ const {
 } = require("../utils/auth.utils");
 const jwt = require("jsonwebtoken");
 module.exports.registerUser = async (req, res, next) => {
-  console.log(req.body)
   try {
     const { firstname, lastname, email, password, phoneNumber, authProvider } =
       req.body;
@@ -31,7 +30,7 @@ module.exports.registerUser = async (req, res, next) => {
       lastname,
       email,
       password: hashedPassword,
-      phoneNumber:String(phoneNumber),
+      phoneNumber,
       authProvider,
     });
     const accessToken = generateAccessToken(user);

@@ -312,8 +312,7 @@ export const CaptainAuthProvider = ({ children }) => {
 
     const fetchCaptainProfile=async()=>{
         try{
-
-            const response=await axios.get('http:localhost:3000/captains/profile',{
+            const response=await axios.get('http://localhost:3000/captains/profile',{
                 withCredentials:true,
                 headers:{
                     Authorization:`Bearer ${getTokenWithExpiry('captainToken')}`
@@ -344,8 +343,11 @@ export const CaptainAuthProvider = ({ children }) => {
             await refershToken();
             const token=getTokenWithExpiry('captainToken');
             if(token){
+                
                 const response=await fetchCaptainProfile();
                 if(response){
+                    console.log(response)
+                    localStorage.setItem('captain',JSON.stringify(response.data));
                     setCaptain(response.data);
                 }
         }

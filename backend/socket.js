@@ -35,19 +35,19 @@ const initializeSocket = (server) => {
       }
     });
 
-    socket.on("update-location-captain", async (data) => {
-      const {userId,location} = data;
-      if(!location || !location.ltd || !location.lng){
-        return socket.emit('error',{message:"Invalid location data"});
-      }
-      console.log(`Captain ${userId} updated location: ${location}`);
-      const captain=await captainModel.findByIdAndUpdate(userId,{location:{
-        ltd:location.ltd,
-        lng:location.lng
-      }
-      },{new:true});
-     
-    });
+      socket.on("update-location-captain", async (data) => {
+        const {userId,location} = data;
+        if(!location || !location.ltd || !location.lng){
+          return socket.emit('error',{message:"Invalid location data"});
+        }
+        console.log(`Captain ${userId} updated location: ${JSON.stringify(location)}`);
+        const geoLocation={
+          type:"Point",
+          coordinates:[location.lng,location.ltd]
+        }
+        const captain=await captainModel.findByIdAndUpdate(userId,{location:geoLocation},{new:true});
+      
+      });
 
     socket.on("disconnect", () => {
       console.log(`Client disconnected: ${socket.id}`);

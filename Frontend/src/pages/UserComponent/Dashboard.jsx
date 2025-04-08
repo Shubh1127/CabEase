@@ -35,12 +35,11 @@ const Dashboard = () => {
   const [VehicleType,setVehicleType]=useState(null)
   const [fare,setFare]=useState({});
   const {socket}=useContext(SocketContext);
-  console.log(user?._id);
   useEffect(()=>{
     if(user){
       socket.emit("join",{userType:"user" , userId:user?._id});
     }
-  })
+  },[user,socket])
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setInfo({

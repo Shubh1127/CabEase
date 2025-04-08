@@ -8,10 +8,12 @@ module.exports.createRide=async(req,res)=>{
     }
     const {pickup,destination,vehicleType}=req.body;
     try{
-        const ride=await rideService.createRide({userId:req.user._-id,pickup,destination,vehicleType});
+        const ride=await rideService.createRide({userId:req.user._id,pickup,destination,vehicleType});
              res.status(201).json({ride})
             const pickupCorrdinates=await mapsService.getAddressCoordinates(pickup);
-            const captainsInRadius=await mapsService.getCaptainsInRadius()
+            console.log(pickupCorrdinates)
+            const captainsInRadius=await mapsService.getCaptainsInRadius(pickupCorrdinates.lng, pickupCorrdinates.ltd, 2);
+            console.log(captainsInRadius)
 
     }catch(err){
         console.error(err);

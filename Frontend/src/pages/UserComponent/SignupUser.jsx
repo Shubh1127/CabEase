@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
+import { useEffect } from 'react';
 function SignupUser(){
     const {
         handleGoogleSignUp,
@@ -7,8 +8,13 @@ function SignupUser(){
         handleChange,
         error,
         handleSubmit,
-        message
+        message,
+        setError
     }=useUser();
+
+    useEffect(()=>{
+        setError('');
+    },[setError])
     return (
         <>
         <div className='h-screen '>

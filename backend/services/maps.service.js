@@ -63,13 +63,18 @@ module.exports.getSuggestions=async(input)=>{
   }
 }
 
-module.exports.getCaptainsInRadius=async(ltd,lng,radius)=>{
-    const captains=await CaptainModel.findMany({
-      location:{
-        $geoWithin:{
-          $centerSphere:[[ltd,lng],radius/6371]
+module.exports.getCaptainsInRadius=async(lng,ltd,radius)=>{
+      const captains=await CaptainModel.find({
+        location: {
+          $nearSphere: {
+            $geometry: {
+              type: "Point",
+              coordinates: [lng, ltd]
+            },
+            $maxDistance: radius * 1000 // meters
+          }
         }
-      }
-    })
+      })
+
   return captains;
 }
