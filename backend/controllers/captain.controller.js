@@ -3,6 +3,7 @@ const captainService=require("../services/captain.services")
 const {validationResult}=require('express-validator')
 const blacklistTokenModel=require('../Models/blacklistToken.model')
 const { generateAccessToken, generateRefreshToken } = require("../utils/auth.utils")
+const jwt=require('jsonwebtoken')
 
 module.exports.registerCaptain=async(req,res,next)=>{
     try{
@@ -11,6 +12,7 @@ module.exports.registerCaptain=async(req,res,next)=>{
             return res.status(400).json({erros:errors.array()})
         }
         const {fullname,email,password,phoneNumber,vehicle}=req.body;
+        console.log(req.body)
         const isCaptainExist=await CaptainModel.findOne({email});
     if(isCaptainExist){
         return res.status(400).json({message:'catain already exist'})
@@ -37,6 +39,7 @@ module.exports.registerCaptain=async(req,res,next)=>{
         })
     res.status(201).json({accessToken,captain});
     }catch(e){
+        // console.log("captain error",e)
         return res.status(500).json({message:e})
     }
 }
@@ -94,7 +97,8 @@ module.exports.logoutCaptain=async (req,res,next)=>{
     
     const token=req.cookies.token || req.headers.authorization.split(' ')[ 1 ];
     await blacklistTokenModel.create({token})
-    res.clearCookie('token');
+    res.clearCookie('refreshTokenCaptain');
+    
     res.status(200).json({message:'Logged out'})
 }
 

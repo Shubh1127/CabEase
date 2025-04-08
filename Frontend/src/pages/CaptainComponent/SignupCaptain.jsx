@@ -37,7 +37,7 @@ const SignupCaptain = () => {
           </div>
           </div>
         <label className='font-semibold ms-1' htmlFor='Mobile'>Phone Number</label>
-        <input className='border border-black rounded p-2 m-1 ' name='phoneNumber' value={captainData.phoneNumber} onChange={handleCaptainChange} placeholder='Enter your phone Number'/>
+        <input className='border border-black rounded p-2 m-1 '  name='phoneNumber' value={captainData.phoneNumber} onChange={handleCaptainChange} placeholder='Enter your phone Number'/>
         <label htmlFor="email" className="font-semibold ms-1">Email</label>
         <input
           className="border border-black rounded p-2 m-1"

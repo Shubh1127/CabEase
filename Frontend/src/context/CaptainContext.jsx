@@ -295,7 +295,15 @@ export const CaptainAuthProvider = ({ children }) => {
             await signOut(auth);
             setCaptain(null);
             setError('');
-            localStorage.removeItem('captainToken')
+            await axios.get('http://localhost:3000/captains/logout',{
+                withCredentials:true,
+                headers:{
+                    Authorization:`Bearer ${getTokenWithExpiry('captainToken')}`
+                }
+            })
+            localStorage.removeItem('captainToken');
+            localStorage.removeItem('captain');
+        
             navigate('/');
         } catch (e) {
             setError(e.message);
