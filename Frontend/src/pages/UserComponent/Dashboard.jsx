@@ -222,7 +222,7 @@ const Dashboard = () => {
           <VehiclePanel  selectVehicle={setVehicleType} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
         </div>
         <div ref={ConfirmRideRef} className="fixed z-10 bottom-0 w-full bg-white translate-y-full px-3 py-6 pt-12">
-          <ConfirmRide vehicleType={VehicleType} createRide={createRide} pickup={info.pickup} destination={info.destination} fare={fare[VehicleType]}setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
+          <ConfirmRide vehicleType={VehicleType} createRide={createRide} pickup={info.pickup} destination={info.destination} fare={fare[VehicleType]} setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
         </div>
         <div ref={vehicleFoundRef} className="fixed z-10 bottom-0 w-full bg-white translate-y-full px-3 py-6 pt-12">
           <LookingForDriver pickup={info.pickup} destination={info.destination} fare={fare[VehicleType]} setVehicleFound={setVehicleFound} />

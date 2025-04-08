@@ -3,12 +3,12 @@ const mongoose=require('mongoose');
 const rideScehma=new mongoose.Schema({
     user:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'User',
+        ref:'user',
         required:true
     },
     captain:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Captain'
+        ref:'c aptain'
     },
     pickup:{
         type:String,
@@ -49,5 +49,4 @@ const rideScehma=new mongoose.Schema({
     }
 })
 
-const rideModel=mongoose.model('Ride',rideScehma);
-module.exports=rideModel;
+module.exports = mongoose.models.Ride || mongoose.model('Ride', rideScehma);

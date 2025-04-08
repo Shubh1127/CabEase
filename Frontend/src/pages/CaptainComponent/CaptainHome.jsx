@@ -10,12 +10,13 @@ import { SocketContext } from "../../context/SocketContext";
 import ConfirmRidePopup from "../../components/ConfirmRidePopup";
 const CaptainHome = () => {
   const {socket}=useContext(SocketContext);
-  const [ridePopupPanel,setRidePopupPanel]=useState(true);
+  const [ridePopupPanel,setRidePopupPanel]=useState(false);
   const [ConfirmRidePopupPanel,setConfirmRidePopupPanel]=useState(false);
   const { handleCaptainLogout } = useCaptainAuth();
   const ridePopupPanelRef=useRef(null);
   const ConfirmRidePopupPanelRef=useRef(null);
   const captain=JSON.parse(localStorage.getItem('captain'));
+  const [ride,setRide]=useState(null)
 useEffect(()=>{
   if(captain){
     socket.emit('join',{
@@ -41,8 +42,14 @@ useEffect(()=>{
   const locationInterval=setInterval(updateLocation,15000);
   updateLocation();
   
-  return()=>clearInterval(locationInterval);
+  // return()=>clearInterval(locationInterval);
 })
+socket.on("new-ride", (data) => {
+  console.log("📦 New ride received:", data);
+  setRide(data)
+  setRidePopupPanel(true)
+});
+
   useGSAP(function(){
     gsap.to(ridePopupPanelRef.current,{
        transform:ridePopupPanel?'translateY(0)':'translateY(100%)',
@@ -81,7 +88,9 @@ useEffect(()=>{
       </div>
       <div>
       <div ref={ridePopupPanelRef} className="fixed z-10 bottom-0 translate-y-full w-full bg-white  px-3 py-10  pt-14 ">
-        <RidePopup setRidePopupPanel={setRidePopupPanel} setConfirmRidePopupPanel={setConfirmRidePopupPanel} />
+        <RidePopup 
+        ride={ride}
+        setRidePopupPanel={setRidePopupPanel} setConfirmRidePopupPanel={setConfirmRidePopupPanel} />
         </div>
       <div ref={ConfirmRidePopupPanelRef} className="fixed z-10 bottom-0 h-screen translate-y-full w-full bg-white  px-3 py-10  pt-14 ">
         <ConfirmRidePopup setConfirmRidePopupPanel={setConfirmRidePopupPanel} setRidePopupPanel={setRidePopupPanel}/>
