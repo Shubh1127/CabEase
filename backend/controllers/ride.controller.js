@@ -47,3 +47,19 @@ module.exports.getFare=async(req,res)=>{
         return res.status(500).json({message:err.message})
     }
 }
+
+module.exports.confirmRide=async(req,res)=>{
+    const errors=validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()})
+    }
+    const {rideId}=req.body;
+    try{
+        const ride=await rideService.confirmRide(rideId,req.captain._id);
+        return res.status(200).json({ride})
+
+    }catch(err){
+        console.error(err);
+        return res.status(500).json({message:err.message})
+    }
+}

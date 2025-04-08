@@ -15,4 +15,6 @@ router.get('/get-fare',authMiddleware.authUser,
     query('pickup').isString().isLength({min:3}).withMessage('invalid pickup address'),
     query('destination').isString().isLength({min:3}).withMessage('invalid destination address')
     ,rideController.getFare)
+
+router.post('/confirm-ride',authMiddleware.authCaptain,rideController.confirmRide)
 module.exports=router;

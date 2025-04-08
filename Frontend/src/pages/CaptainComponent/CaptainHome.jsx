@@ -8,6 +8,7 @@ import { gsap } from "gsap";
 import { useRef,useContext,useEffect } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import ConfirmRidePopup from "../../components/ConfirmRidePopup";
+import axios from "axios";
 const CaptainHome = () => {
   const {socket}=useContext(SocketContext);
   const [ridePopupPanel,setRidePopupPanel]=useState(false);
@@ -50,6 +51,12 @@ socket.on("new-ride", (data) => {
   setRidePopupPanel(true)
 });
 
+async function confirmRide(){
+  const response=await axios.post('http://localhost:3000/rides/confirm-ride',{})
+  setRidePopupPanel(false)
+  setConfirmRidePopupPanel(true)
+       
+}
   useGSAP(function(){
     gsap.to(ridePopupPanelRef.current,{
        transform:ridePopupPanel?'translateY(0)':'translateY(100%)',
@@ -89,7 +96,7 @@ socket.on("new-ride", (data) => {
       <div>
       <div ref={ridePopupPanelRef} className="fixed z-10 bottom-0 translate-y-full w-full bg-white  px-3 py-10  pt-14 ">
         <RidePopup 
-        ride={ride}
+        ride={ride} confirmRide={confirmRide}
         setRidePopupPanel={setRidePopupPanel} setConfirmRidePopupPanel={setConfirmRidePopupPanel} />
         </div>
       <div ref={ConfirmRidePopupPanelRef} className="fixed z-10 bottom-0 h-screen translate-y-full w-full bg-white  px-3 py-10  pt-14 ">
