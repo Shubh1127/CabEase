@@ -18,7 +18,7 @@ const FinishRide = (props) => {
             src="https://imgs.search.brave.com/7X6LbkIGdSn8dongwIvfqKmyE_FCAc9XrKVg487t-jE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNTA4/OTU2NjQ0L3Bob3Rv/L3ByZXR0eS1jb2xv/bWJpYW4td29tYW4u/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PWpFd1RDTUtTcGpZ/c2FTZmlGSWxpZllu/ZVVwY3p1cmVRRmw4/bzU0M19aakU9"
           />
 
-          <h2 className="text-xl font-medium">Harsh patel</h2>
+          <h2 className="text-xl font-medium">{props?.ride?.user?.fullname?.firstname}</h2>
         </div>
         <h5 className=" text-lg font-semibold">2.2 KM</h5>
       </div>
@@ -29,7 +29,7 @@ const FinishRide = (props) => {
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-gray-600 text-sm -mt-1">
-                Kankariya Talab, Ahemdabad
+                {props?.ride?.pickup}
               </p>
             </div>
           </div>
@@ -39,7 +39,7 @@ const FinishRide = (props) => {
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-gray-600 text-sm -mt-1">
-                Kankariya Talab, Ahemdabad
+                {props?.ride?.destination}
               </p>
             </div>
           </div>
@@ -47,7 +47,7 @@ const FinishRide = (props) => {
             {" "}
             <i className="ri-currency-line"></i>
             <div>
-              <h3 className="text-lg font-medium">₹193</h3>
+              <h3 className="text-lg font-medium">₹{props?.ride?.fare}</h3>
               <p className="text-gray-600 text-sm -mt-1">Cash Cash</p>
             </div>
           </div>

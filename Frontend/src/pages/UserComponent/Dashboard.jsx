@@ -56,7 +56,7 @@ const Dashboard = () => {
 
   socket.on('ride-started',(ride)=>{
     setWaitingForDriver(false);
-    navigate('/riding')
+    navigate('/riding',{state:{ride}})
     // setRide(ride);
   })
 

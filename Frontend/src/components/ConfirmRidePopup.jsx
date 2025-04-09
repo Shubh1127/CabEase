@@ -20,11 +20,10 @@ const ConfirmRidePopup = (props) => {
         Authorization: `Bearer ${getTokenWithExpiry('captainToken')}`
       }
     });
-    
     if(response.status===200){
       props.setConfirmRidePopupPanel(false)
       props.setRidePopupPanel(false)
-      navigate('/captain-riding')
+      navigate('/captain-riding',{state:{ride:response.data.ride}})
     }
 
     console.log("submitted");
