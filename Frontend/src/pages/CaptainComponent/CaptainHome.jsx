@@ -46,7 +46,7 @@ useEffect(()=>{
   // return()=>clearInterval(locationInterval);
 })
 socket.on("new-ride", (data) => {
-  console.log("📦 New ride received:", data);
+  // console.log("📦 New ride received:", data);
   setRide(data)
   setRidePopupPanel(true)
 });

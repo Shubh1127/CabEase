@@ -1,5 +1,28 @@
 import { Link } from "react-router-dom";
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom'
+import { useCaptainAuth } from "../context/CaptainContext";
 const FinishRide = (props) => {
+  const navigate=useNavigate();
+  const {getTokenWithExpiry} =useCaptainAuth();
+  async function endRide(){
+    const token = getTokenWithExpiry("captainToken");
+    const response = await axios.post(
+      "http://localhost:3000/rides/end-ride",
+      {
+        rideId: props?.ride?._id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.status === 200) {
+      props.setFinishRidePanel(false);
+      navigate('/captain-home')
+    }
+  }
   return (
     <div>
       <h5
@@ -54,12 +77,12 @@ const FinishRide = (props) => {
         </div>
 
         <div className="mt-10 w-full">
-          <Link
-            to="/captain-home "
+          <button
+            onClick={endRide}
             className="w-full mt-5 flex justify-center  bg-green-600 text-lg text-white font-semibold p-3 rounded-lg "
           >
             Finish Ride
-          </Link>
+          </button>
           {/* <p className="text-red-500 mt-10 text-xs">Click on the button if you have completed the payment</p> */}
         </div>
       </div>

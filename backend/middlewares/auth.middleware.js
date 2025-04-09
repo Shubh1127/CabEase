@@ -36,8 +36,6 @@ module.exports.authCaptain=async(req,res,next)=>{
     if(!token){
         return res.status(401).json({message:'Unauthorized'})
     }
-
-        console.log(token)
     try{
         const decoded =jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
         const captain= await CaptainModel.findById(decoded.id)

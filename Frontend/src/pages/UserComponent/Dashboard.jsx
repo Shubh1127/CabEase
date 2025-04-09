@@ -13,6 +13,7 @@ import { useContext } from "react";
 import { useUser } from "../../context/UserContext";
 import { SocketContext } from "../../context/SocketContext";
 import {useNavigate} from "react-router-dom"
+import LiveTracking from "../../components/LiveTracking";
 const Dashboard = () => {
   const navigate=useNavigate();
   const [info, setInfo] = useState({
@@ -49,7 +50,7 @@ const Dashboard = () => {
     setVehicleFound(false);
     setWaitingForDriver(true);
     setRide(ride);
-    console.log(ride)
+    // console.log(ride)
     // setWaitingForDriver(false);
     // console.log(ride);
   })
@@ -183,11 +184,12 @@ const Dashboard = () => {
           alt=""
         />
         <div className="h-screen w-screen">
-          <img
+          {/* <img
             className="h-full w-full object-cover"
             src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
             alt=""
-          />
+          /> */}
+          <LiveTracking/>
         </div>
         <div className="h-screen flex flex-col justify-end absolute top-0 w-full ">
           <div className="h-[30%] bg-white p-5 relative">

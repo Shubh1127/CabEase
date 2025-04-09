@@ -10,7 +10,6 @@ const ConfirmRidePopup = (props) => {
   const token=getTokenWithExpiry('captainToken')
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(token)
     const response =await axios.get('http://localhost:3000/rides/start-ride', {
       params: {
         rideId: props.ride._id,

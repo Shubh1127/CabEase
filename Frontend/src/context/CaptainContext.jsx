@@ -347,7 +347,6 @@ export const CaptainAuthProvider = ({ children }) => {
                 
                 const response=await fetchCaptainProfile();
                 if(response){
-                    console.log(response)
                     localStorage.setItem('captain',JSON.stringify(response.data));
                     setCaptain(response.data);
                 }
