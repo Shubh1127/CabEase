@@ -314,6 +314,7 @@ export const UserProvider = ({ children }) => {
                 error,
                 setError,
                 isVerified,
+                getTokenWithExpiry
             }}
         >
             {children}

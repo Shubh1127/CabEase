@@ -9,15 +9,12 @@ const blacklistTokenModel = require("../Models/blacklistToken.model");
 module.exports.authUser = async (req, res, next) => {
     // console.log("Received Headers:", req.headers);
     let token = req.headers?.authorization?.split(" ")[1]; // Get accessToken from header
-    
 
     if (!token) {
-        console.log(here)
         return res.status(401).json({ message: "Unauthorized: No Token Provided" });
     }
 
     try {
-        // Verify the accessToken or refreshToken
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
         const user = await userModel.findById(decoded.id).select("+password");
 
@@ -40,7 +37,7 @@ module.exports.authCaptain=async(req,res,next)=>{
         return res.status(401).json({message:'Unauthorized'})
     }
 
-    
+        console.log(token)
     try{
         const decoded =jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
         const captain= await CaptainModel.findById(decoded.id)
@@ -49,6 +46,7 @@ module.exports.authCaptain=async(req,res,next)=>{
 
         return next();
     }catch(err){
+        console.log(err)
         return res.status(401).json({message:'Unauthorized'})
     }
 }

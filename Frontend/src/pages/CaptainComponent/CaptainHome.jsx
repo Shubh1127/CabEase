@@ -13,7 +13,7 @@ const CaptainHome = () => {
   const {socket}=useContext(SocketContext);
   const [ridePopupPanel,setRidePopupPanel]=useState(false);
   const [ConfirmRidePopupPanel,setConfirmRidePopupPanel]=useState(false);
-  const { handleCaptainLogout } = useCaptainAuth();
+  const { handleCaptainLogout ,getTokenWithExpiry} = useCaptainAuth();
   const ridePopupPanelRef=useRef(null);
   const ConfirmRidePopupPanelRef=useRef(null);
   const captain=JSON.parse(localStorage.getItem('captain'));
@@ -40,7 +40,7 @@ useEffect(()=>{
       })
     }
   }
-  const locationInterval=setInterval(updateLocation,15000);
+  const locationInterval=setInterval(updateLocation,30000);
   updateLocation();
   
   // return()=>clearInterval(locationInterval);
@@ -52,8 +52,22 @@ socket.on("new-ride", (data) => {
 });
 
 async function confirmRide(){
-  const response=await axios.post('http://localhost:3000/rides/confirm-ride',{})
+  
+  const response=await axios.post('http://localhost:3000/rides/confirm-ride',
+    {
+    rideId:ride._id,
+    captainId:captain._id,
+  },{
+
+    withCredentials:true,
+    headers:{
+      Authorization:`Bearer ${getTokenWithExpiry('captainToken')}`
+    }
+  }
+)
+
   setRidePopupPanel(false)
+  
   setConfirmRidePopupPanel(true)
        
 }
@@ -100,7 +114,9 @@ async function confirmRide(){
         setRidePopupPanel={setRidePopupPanel} setConfirmRidePopupPanel={setConfirmRidePopupPanel} />
         </div>
       <div ref={ConfirmRidePopupPanelRef} className="fixed z-10 bottom-0 h-screen translate-y-full w-full bg-white  px-3 py-10  pt-14 ">
-        <ConfirmRidePopup setConfirmRidePopupPanel={setConfirmRidePopupPanel} setRidePopupPanel={setRidePopupPanel}/>
+        <ConfirmRidePopup 
+        ride={ride}
+        setConfirmRidePopupPanel={setConfirmRidePopupPanel} setRidePopupPanel={setRidePopupPanel}/>
         </div>
       </div>
     </div>

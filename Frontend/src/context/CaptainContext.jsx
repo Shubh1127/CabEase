@@ -279,6 +279,7 @@ export const CaptainAuthProvider = ({ children }) => {
                 withCredentials:true,
             })
             const cap=response?.data?.Captain;
+            localStorage.setItem('captain',JSON.stringify(cap));
             const token=response?.data?.accessToken;
             setTokenWithExpiry('captainToken',token, 15);
             setCaptain(cap);
@@ -385,6 +386,7 @@ export const CaptainAuthProvider = ({ children }) => {
                 setCaptain,
                 vehicleInfo,
                 handleVechileChange,
+                getTokenWithExpiry
             }}
         >
             {children}

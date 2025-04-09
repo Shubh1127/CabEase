@@ -8,7 +8,7 @@ const rideScehma=new mongoose.Schema({
     },
     captain:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'c aptain'
+        ref:'Captain'
     },
     pickup:{
         type:String,

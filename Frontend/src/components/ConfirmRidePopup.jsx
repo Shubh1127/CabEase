@@ -1,9 +1,32 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import axios from 'axios';
+import { useCaptainAuth } from "../context/CaptainContext";
+import {useNavigate} from "react-router-dom"
 const ConfirmRidePopup = (props) => {
+  const navigate=useNavigate();
+  const {getTokenWithExpiry}=useCaptainAuth()
   const [otp,setOtp]=useState('');
-  const submitHandler = (e) => {
+  const token=getTokenWithExpiry('captainToken')
+  const submitHandler = async (e) => {
     e.preventDefault();
+    console.log(token)
+    const response =await axios.get('http://localhost:3000/rides/start-ride', {
+      params: {
+        rideId: props.ride._id,
+        otp: otp
+      },
+      headers: {
+        Authorization: `Bearer ${getTokenWithExpiry('captainToken')}`
+      }
+    });
+    
+    if(response.status===200){
+      props.setConfirmRidePopupPanel(false)
+      props.setRidePopupPanel(false)
+      navigate('/captain-riding')
+    }
+
     console.log("submitted");
   };
   return (
@@ -26,7 +49,7 @@ const ConfirmRidePopup = (props) => {
             src="https://imgs.search.brave.com/7X6LbkIGdSn8dongwIvfqKmyE_FCAc9XrKVg487t-jE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNTA4/OTU2NjQ0L3Bob3Rv/L3ByZXR0eS1jb2xv/bWJpYW4td29tYW4u/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PWpFd1RDTUtTcGpZ/c2FTZmlGSWxpZllu/ZVVwY3p1cmVRRmw4/bzU0M19aakU9"
           />
 
-          <h2 className="text-xl font-medium">Harsh patel</h2>
+          <h2 className="text-xl font-medium capitalize">{props.ride?.user?.fullname?.firstname}</h2>
         </div>
         <h5 className=" text-lg font-semibold">2.2 KM</h5>
       </div>
@@ -37,7 +60,7 @@ const ConfirmRidePopup = (props) => {
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-gray-600 text-sm -mt-1">
-                Kankariya Talab, Ahemdabad
+                {props.ride?.pickup}
               </p>
             </div>
           </div>
@@ -47,7 +70,7 @@ const ConfirmRidePopup = (props) => {
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-gray-600 text-sm -mt-1">
-                Kankariya Talab, Ahemdabad
+               {props.ride?.destination}
               </p>
             </div>
           </div>
@@ -55,7 +78,7 @@ const ConfirmRidePopup = (props) => {
             {" "}
             <i className="ri-currency-line"></i>
             <div>
-              <h3 className="text-lg font-medium">₹193</h3>
+              <h3 className="text-lg font-medium">₹{props.ride?.fare}</h3>
               <p className="text-gray-600 text-sm -mt-1">Cash Cash</p>
             </div>
           </div>
@@ -74,12 +97,12 @@ const ConfirmRidePopup = (props) => {
               placeholder="Enter OTP"
               className="bg-[#eee] px-6 py-4 text-lg font-medium  rounded-lg w-full mt-5"
             />
-            <Link
-              to="/captain-riding "
+            <button
+             
               className="w-full mt-5 flex justify-center text-lg  bg-green-600 text-white font-semibold p-3 rounded-lg "
             >
               Confirm
-            </Link>
+            </button>
             <button
               className="w-full mt-1 bg-red-500 text-white font-semibold  text-lg p-2 rounded-lg "
               onClick={() => {
