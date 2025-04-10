@@ -1,5 +1,5 @@
 import { LoadScript, GoogleMap, Marker } from '@react-google-maps/api';
-// import { AdvancedMarkerElement } from '@react-google-maps/api';
+import { AdvancedMarkerElement } from '@react-google-maps/api';
 import { useState, useEffect } from 'react';
 
 const containerStyle = {
