@@ -9,7 +9,7 @@ const {
 const jwt = require("jsonwebtoken");
 module.exports.registerUser = async (req, res, next) => {
   try {
-    const { firstname, lastname, email, password, phoneNumber, authProvider } =
+    const { firstname, lastname, email, password, phoneNumber, authProvider ,age} =
       req.body;
 
       if (!phoneNumber) {
