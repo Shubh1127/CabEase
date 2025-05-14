@@ -9,7 +9,7 @@ const Home = () => {
           <h2 className="font-bold text-2xl">Get Started with Uber</h2>
           {
             user ? <Link to='/dashboard' className="flex items-center justify-center bg-black text-white w-full rounded-md h-10">Continue</Link>:
-            <Link to='/signup' className="flex items-center justify-center bg-black text-white w-full rounded-md h-11">Continue</Link>
+            <Link to='/signup' className="flex items-center justify-center bg-black text-white w-full rounded-md h-10">Continue</Link>
           }
          
         </div>
