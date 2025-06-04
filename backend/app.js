@@ -13,15 +13,22 @@ const app=express();
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
-app.use(cors({ 
-    origin: [
-        "http://localhost:5174",
-        "https://cabease-a4k3.onrender.com",
-        "https://cab-ease-87je7upkq-shubhams-projects-b885d3f5.vercel.app"
-    ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-}));
+const corsOptions = {
+  origin: [
+    "http://localhost:5174",
+    "https://cab-ease-h78lk71yy-shubhams-projects-b885d3f5.vercel.app",
+    "https://cabease-a4k3.onrender.com"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+};
+
+// Apply CORS to all requests
+app.use(cors(corsOptions));
+
+// Handle preflight requests for all routes
+app.options('*', cors(corsOptions));
+
 ConnectToDb()
 app.get('/',(req,res)=>{
     res.send("hello world");
