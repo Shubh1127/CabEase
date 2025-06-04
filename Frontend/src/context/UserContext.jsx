@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-
+import BASE_URL from './Config';
 const UserContext = createContext();
 
 export const useUser = () => {
@@ -55,7 +55,7 @@ export const UserProvider = ({ children }) => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.post('http://localhost:3000/users/refresh-token', {}, { withCredentials: true });
+            const response = await axios.post(`${BASE_URL}/users/refresh-token`, {}, { withCredentials: true });
             const newAccessToken = response.data.accessToken;
             setTokenWithExpiry('token', newAccessToken, 15); 
         } catch (error) {
@@ -80,7 +80,7 @@ export const UserProvider = ({ children }) => {
                 email: user.email,
                 phoneNumber: data.phoneNumber,
             });
-            const response = await axios.post('http://localhost:3000/users/register', data);
+            const response = await axios.post(`${BASE_URL}/users/register`, data);
             const accessToken = response?.data?.accessToken;
             const userResponse = response?.data?.user;
             setTokenWithExpiry('token', accessToken, 15); // Set access token with 15 minutes expiry
@@ -136,7 +136,7 @@ export const UserProvider = ({ children }) => {
                     phoneNumber
                 });
 
-                const response = await axios.post('http://localhost:3000/users/register', {
+                const response = await axios.post(`${BASE_URL}/users/register`, {
                     firstname,
                     lastname,
                     email: user.email,
@@ -185,8 +185,8 @@ export const UserProvider = ({ children }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/users/login', data,{
-                withCredentials:true,
+            const response = await axios.post(`${BASE_URL}/users/login`, data, {
+                withCredentials: true,
             });
 
             const token = response?.data?.accessToken;
@@ -209,7 +209,7 @@ export const UserProvider = ({ children }) => {
     const fetchUserProfile=async()=>{
         try{
             // console.log(getTokenWithExpiry('token'));
-            const respone=await axios.get('http://localhost:3000/users/profile',{
+            const respone=await axios.get(`${BASE_URL}/users/profile`,{
                 withCredentials:true,
                 headers:{
                     Authorization:`Bearer ${getTokenWithExpiry('token')}`

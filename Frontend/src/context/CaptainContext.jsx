@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-
+import BASE_URL from './Config';
 const CaptainContext = createContext();
 
 export const useCaptainAuth = () => {
@@ -63,8 +63,8 @@ export const CaptainAuthProvider = ({ children }) => {
 
     const refershToken=async()=>{
         try{
-            const response=await axios.post('http://localhost:3000/captains/refresh-token',{},{
-                withCredentials:true,
+            const response = await axios.post(`${BASE_URL}/captains/refresh-token`, {}, {
+                withCredentials: true,
             })
             const newAccessToken=response.data.accessToken;
             setTokenWithExpiry('captainToken',newAccessToken, 15);
@@ -78,7 +78,7 @@ export const CaptainAuthProvider = ({ children }) => {
         console.log(captainData.phoneNumber)
         e.preventDefault();
         try {
-            const response=await axios.post('http://localhost:3000/captains/register',{
+            const response=await axios.post(`${BASE_URL}/captains/register`,{
                 fullname:{
                     firstname: captainData.firstname,
                     lastname: captainData.lastname,
@@ -175,7 +175,7 @@ export const CaptainAuthProvider = ({ children }) => {
                         vehicleType: vehicleInfo.vehicleType,
                     }
                 });
-                const response=await axios.post('http:localhost:3000/captains/register',{
+                const response=await axios.post(`${BASE_URL}/captains/register`,{
                     fullname:{
                         firstname: captainData.firstname,
                         lastname: captainData.lastname,
@@ -271,8 +271,7 @@ export const CaptainAuthProvider = ({ children }) => {
             return;
         }
         try {
-           
-            const response=await axios.post('http://localhost:3000/captains/login',{
+            const response=await axios.post(`${BASE_URL}/captains/login`,{
                 email:captainData.email,
                 password:captainData.password
             },{
@@ -296,10 +295,10 @@ export const CaptainAuthProvider = ({ children }) => {
             await signOut(auth);
             setCaptain(null);
             setError('');
-            await axios.get('http://localhost:3000/captains/logout',{
-                withCredentials:true,
-                headers:{
-                    Authorization:`Bearer ${getTokenWithExpiry('captainToken')}`
+            await axios.get(`${BASE_URL}/captains/logout`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${getTokenWithExpiry('captainToken')}`
                 }
             })
             localStorage.removeItem('captainToken');
@@ -313,7 +312,7 @@ export const CaptainAuthProvider = ({ children }) => {
 
     const fetchCaptainProfile=async()=>{
         try{
-            const response=await axios.get('http://localhost:3000/captains/profile',{
+            const response=await axios.get(`${BASE_URL}/captains/profile`,{
                 withCredentials:true,
                 headers:{
                     Authorization:`Bearer ${getTokenWithExpiry('captainToken')}`
