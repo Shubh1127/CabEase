@@ -16,6 +16,7 @@ app.use(cookieParser())
 app.use(cors({ 
     origin: [
         "http://localhost:5174",
+        "https://cabease-a4k3.onrender.com",
         "https://cab-ease-87je7upkq-shubhams-projects-b885d3f5.vercel.app/"
     ],
     credentials: true,

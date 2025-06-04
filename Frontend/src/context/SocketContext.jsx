@@ -3,7 +3,10 @@ import {io} from 'socket.io-client';
 import BASE_URL from './Config';
 export const SocketContext =createContext();
 
-const socket=io(BASE_URL);
+const socket = io(BASE_URL, {
+  transports: ['websocket', 'polling'], // Ensure proper transport methods
+  withCredentials: true, // Allow cross-origin requests
+});
 
 const SocketProvider=({children})=>{
     useEffect(()=>{
