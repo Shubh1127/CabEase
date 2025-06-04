@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
 import { useCaptainAuth } from "../context/CaptainContext";
+import BASE_URL from "../context/Config";
 const FinishRide = (props) => {
   const navigate=useNavigate();
   const {getTokenWithExpiry} =useCaptainAuth();
   async function endRide(){
     const token = getTokenWithExpiry("captainToken");
     const response = await axios.post(
-      "http://localhost:3000/rides/end-ride",
+      `${BASE_URL}/rides/end-ride`,
       {
         rideId: props?.ride?._id,
       },

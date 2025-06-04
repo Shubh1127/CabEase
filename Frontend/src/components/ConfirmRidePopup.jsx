@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from 'axios';
 import { useCaptainAuth } from "../context/CaptainContext";
 import {useNavigate} from "react-router-dom"
+import BASE_URL from "../context/Config";
 const ConfirmRidePopup = (props) => {
   const navigate=useNavigate();
   const {getTokenWithExpiry}=useCaptainAuth()
@@ -10,7 +11,7 @@ const ConfirmRidePopup = (props) => {
   const token=getTokenWithExpiry('captainToken')
   const submitHandler = async (e) => {
     e.preventDefault();
-    const response =await axios.get('http://localhost:3000/rides/start-ride', {
+    const response =await axios.get(`${BASE_URL}/rides/start-ride`, {
       params: {
         rideId: props.ride._id,
         otp: otp
