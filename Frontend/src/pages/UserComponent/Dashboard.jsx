@@ -14,6 +14,7 @@ import { useUser } from "../../context/UserContext";
 import { SocketContext } from "../../context/SocketContext";
 import {useNavigate} from "react-router-dom"
 import LiveTracking from "../../components/LiveTracking";
+import BASE_URL from "../../context/Config";
 const Dashboard = () => {
   const navigate=useNavigate();
   const [info, setInfo] = useState({
@@ -70,7 +71,7 @@ const Dashboard = () => {
 
     if (value.length > 2) {
       try {
-        const response = await axios.get("http://localhost:3000/maps/get-suggestions", {
+        const response = await axios.get(`${BASE_URL}/maps/get-suggestions`, {
           params: {input:value},
           headers:{
             Authorization: `Bearer ${localStorage.getItem("idToken")}`,
@@ -140,7 +141,7 @@ const Dashboard = () => {
     setPanelOpen(false);
     try{
       const token=getTokenWithExpiry('token');
-      const response=await axios.get('http://localhost:3000/rides/get-fare',{
+      const response=await axios.get(`${BASE_URL}/rides/get-fare`,{
         withCredentials:true,
         params:{
           pickup:info.pickup,
@@ -160,7 +161,7 @@ const Dashboard = () => {
   async function createRide(vehicleType){
     try{
       const token=getTokenWithExpiry('token');
-      const response=await axios.post('http://localhost:3000/rides/create',{
+      const response=await axios.post(`${BASE_URL}/rides/create`,{
         withCredentials:true,
         pickup:info.pickup,
         destination:info.destination,

@@ -9,6 +9,7 @@ import { useRef,useContext,useEffect } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import ConfirmRidePopup from "../../components/ConfirmRidePopup";
 import axios from "axios";
+import BASE_URL from "../../context/Config";
 const CaptainHome = () => {
   const {socket}=useContext(SocketContext);
   const [ridePopupPanel,setRidePopupPanel]=useState(false);
@@ -52,8 +53,8 @@ socket.on("new-ride", (data) => {
 });
 
 async function confirmRide(){
-  
-  const response=await axios.post('http://localhost:3000/rides/confirm-ride',
+
+  const response=await axios.post(`${BASE_URL}/rides/confirm-ride`,
     {
     rideId:ride._id,
     captainId:captain._id,
